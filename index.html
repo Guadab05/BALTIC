@@ -87,68 +87,62 @@
 
   /* ── HOME ── */
   .hero {
-    padding: 88px 0 72px;
+    padding: 80px 0 64px;
     border-bottom: 1px solid var(--border);
     margin-bottom: 56px;
   }
-  .hero-eyebrow {
-    font-size: 10px;
-    font-weight: 500;
-    letter-spacing: 0.22em;
-    text-transform: uppercase;
-    color: var(--gold);
-    margin-bottom: 24px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-  .hero-eyebrow::after {
-    content: '';
-    flex: 1;
-    max-width: 48px;
-    height: 1px;
-    background: var(--gold);
-    opacity: 0.4;
+  .hero-location {
+    font-family: var(--ff-d);
+    font-size: 16px;
+    font-weight: 400;
+    font-style: italic;
+    color: var(--cream-dim);
+    margin-bottom: 20px;
+    letter-spacing: 0.02em;
   }
   .hero h1 {
     font-family: var(--ff-d);
-    font-size: 76px;
+    font-size: 80px;
     font-weight: 400;
-    line-height: 1.0;
+    line-height: 0.95;
     color: var(--cream);
-    margin-bottom: 24px;
+    margin-bottom: 32px;
     letter-spacing: -0.01em;
   }
   .hero h1 em { font-style: italic; color: var(--gold); }
   .hero-sub {
+    font-family: var(--ff-d);
     color: var(--cream-dim);
-    font-size: 14px;
-    font-weight: 300;
-    letter-spacing: 0.03em;
-    margin-bottom: 44px;
-    line-height: 1.7;
+    font-size: 18px;
+    font-weight: 400;
+    font-style: italic;
+    margin-bottom: 48px;
+    line-height: 1.6;
+    max-width: 420px;
   }
-  .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+  .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 0; }
   .hero-info {
     display: flex;
-    gap: 48px;
-    margin-top: 64px;
-    padding-top: 36px;
+    gap: 56px;
+    margin-top: 72px;
+    padding-top: 40px;
     border-top: 1px solid var(--border);
   }
   .info-item .lbl {
     font-size: 10px;
-    letter-spacing: 0.14em;
+    letter-spacing: 0.16em;
     text-transform: uppercase;
     color: var(--gold);
-    margin-bottom: 5px;
+    margin-bottom: 8px;
+    font-weight: 500;
   }
   .info-item .val {
     font-family: var(--ff-d);
-    font-size: 17px;
+    font-size: 18px;
     font-weight: 400;
     color: var(--cream);
-    letter-spacing: 0.02em;
+    letter-spacing: 0.01em;
+    margin-top: 4px;
   }
 
   /* ── BUTTONS ── */
@@ -550,7 +544,7 @@
   a { color: var(--gold); }
 
   @media (max-width: 480px) {
-    .hero h1 { font-size: 44px; }
+    .hero h1 { font-size: 52px; }
     .step-title { font-size: 32px; }
     .slots-grid { grid-template-columns: repeat(3, 1fr); }
     header { padding: 16px 18px; }
@@ -574,17 +568,17 @@
   <!-- ═══ HOME ═══ -->
   <div id="view-home" class="view active">
     <div class="hero">
-      <p class="hero-tag">Tapiales, Buenos Aires</p>
+      <p class="hero-location">Tapiales, Buenos Aires</p>
       <h1>Tu momento<br>de <em>belleza</em></h1>
-      <p>Reservá tu turno online en cualquier<br>momento, desde donde estés.</p>
+      <p class="hero-sub">Reservá tu turno online en cualquier momento, desde donde estés.</p>
       <div class="hero-actions">
         <button class="btn-primary" onclick="startBooking()">Reservar turno</button>
         <button class="btn-secondary" onclick="showView('manage')">Gestionar mi turno</button>
       </div>
-      <div class="info-strip">
+      <div class="hero-info">
         <div class="info-item">
           <div class="lbl">Horario</div>
-          <div class="val">Lunes a Sáb · 10–19hs</div>
+          <div class="val">Lunes a Sábado · 10 a 19hs</div>
         </div>
         <div class="info-item">
           <div class="lbl">Dirección</div>
