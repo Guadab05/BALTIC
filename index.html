@@ -481,6 +481,7 @@
   }
   .slot:hover { border-color: var(--gold); color: var(--gold); }
   .slot.sel { background: var(--gold); color: var(--bg); border-color: var(--gold); font-weight: 500; }
+  .slot-off { opacity: 0.28; cursor: not-allowed; pointer-events: none; text-decoration: line-through; }
 
   /* ── CONFIRM SUMMARY ── */
   .confirm-box {
@@ -1482,9 +1483,14 @@ async function loadSlots() {
     appts = r1.data||[]; blocked = r2.data||[];
   } catch(e) { box.innerHTML='<div class="empty">Error de conexión.</div>'; console.error(e); return; }
   const dur=ST.svc.dur, OPEN=10*60, CLOSE=19*60;
+  const isToday = ST.date === todayStr();
+  const nowMin = isToday ? new Date().getHours()*60 + new Date().getMinutes() : -1;
   const slots=[];
   for(let t=OPEN; t+dur<=CLOSE; t+=30){
     const ts=minToTime(t), te=minToTime(t+dur);
+    // Past slots for today
+    if(isToday && t <= nowMin){ slots.push({ts,te,pro:null,reason:'past'}); continue; }
+    // Check availability across both professionals
     let freePro=null;
     for(let pro=1;pro<=2;pro++){
       const ap=(appts||[]).filter(a=>a.professional_id===pro);
@@ -1493,14 +1499,18 @@ async function loadSlots() {
               &&!bl.some(b=>overlaps(ts,te,b.time_start,b.time_end));
       if(ok){freePro=pro;break;}
     }
-    if(freePro) slots.push({ts,te,pro:freePro});
+    slots.push({ts,te,pro:freePro,reason:freePro?'':'taken'});
   }
-  if(!slots.length){
+  const availableCount = slots.filter(s=>s.pro).length;
+  if(!availableCount){
     box.innerHTML='<div class="empty">Sin turnos disponibles para este día.<br>Probá con otra fecha.</div>';
     return;
   }
   const selTs=ST.slot?.ts;
   box.innerHTML='<div class="slots-grid">'+slots.map(sl=>{
+    if(sl.reason==='past' || sl.reason==='taken'){
+      return `<div class="slot slot-off" title="${sl.reason==='past'?'Horario pasado':'Turno ocupado'}">${sl.ts}</div>`;
+    }
     const sel=selTs===sl.ts?'sel':'';
     return `<div class="slot ${sel}" onclick="pickSlot('${sl.ts}','${sl.te}',${sl.pro})">${sl.ts}</div>`;
   }).join('')+'</div>';
