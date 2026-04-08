@@ -1,0 +1,1254 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>Baltic Studio — Reservas</title>
+  
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400;1,500&family=DM+Sans:wght@300;400;500&display=swap');
+
+  :root {
+    --bg:        #1A1510;
+    --bg2:       #221C16;
+    --bg3:       #2B231B;
+    --gold:      #C9976A;
+    --gold-lt:   #DDB48A;
+    --cream:     #F0E8DC;
+    --cream-dim: #A89880;
+    --border:    rgba(201,151,106,0.18);
+    --border-lt: rgba(240,232,220,0.1);
+    --card:      #231D17;
+    --r:         4px;
+    --rs:        4px;
+    --ff-d:      'Playfair Display', serif;
+    --ff-b:      'DM Sans', sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: var(--ff-b);
+    background: var(--bg);
+    color: var(--cream);
+    min-height: 100vh;
+    font-size: 15px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+    padding: 20px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    backdrop-filter: blur(12px);
+  }
+  .logo {
+    font-family: var(--ff-d);
+    font-size: 22px;
+    font-weight: 400;
+    letter-spacing: 0.12em;
+    color: var(--cream);
+    cursor: pointer;
+    text-transform: uppercase;
+  }
+  .logo span { color: var(--gold); font-style: italic; font-weight: 400; }
+  .header-nav { display: flex; gap: 4px; }
+  .nav-btn {
+    background: none;
+    border: none;
+    font-family: var(--ff-b);
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--cream-dim);
+    cursor: pointer;
+    padding: 8px 14px;
+    border-radius: 2px;
+    transition: all 0.2s;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .nav-btn:hover, .nav-btn.active { color: var(--gold); }
+
+  /* ── MAIN ── */
+  main { max-width: 620px; margin: 0 auto; padding: 0 20px 80px; }
+
+  /* ── VIEWS ── */
+  .view { display: none; }
+  .view.active { display: block; animation: fadeIn 0.35s ease both; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* ── HOME ── */
+  .hero {
+    padding: 72px 0 56px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 48px;
+  }
+  .hero-eyebrow {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .hero-eyebrow::after {
+    content: '';
+    flex: 1;
+    max-width: 48px;
+    height: 1px;
+    background: var(--gold);
+    opacity: 0.4;
+  }
+  .hero h1 {
+    font-family: var(--ff-d);
+    font-size: 64px;
+    font-weight: 400;
+    line-height: 1.0;
+    color: var(--cream);
+    margin-bottom: 20px;
+    letter-spacing: -0.01em;
+  }
+  .hero h1 em { font-style: italic; color: var(--gold); }
+  .hero-sub {
+    color: var(--cream-dim);
+    font-size: 14px;
+    font-weight: 300;
+    letter-spacing: 0.03em;
+    margin-bottom: 44px;
+    line-height: 1.7;
+  }
+  .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+  .hero-info {
+    display: flex;
+    gap: 40px;
+    margin-top: 56px;
+    padding-top: 32px;
+    border-top: 1px solid var(--border-lt);
+  }
+  .info-item .lbl {
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 5px;
+  }
+  .info-item .val {
+    font-family: var(--ff-d);
+    font-size: 17px;
+    font-weight: 400;
+    color: var(--cream);
+    letter-spacing: 0.02em;
+  }
+
+  /* ── BUTTONS ── */
+  .btn-primary {
+    background: var(--gold);
+    color: var(--bg);
+    border: none;
+    padding: 16px 36px;
+    border-radius: var(--rs);
+    font-family: var(--ff-b);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.25s;
+    white-space: nowrap;
+  }
+  .btn-primary:hover:not(:disabled) { background: var(--gold-lt); transform: translateY(-1px); }
+  .btn-primary:disabled { opacity: 0.3; cursor: not-allowed; }
+
+  .btn-secondary {
+    background: transparent;
+    color: var(--cream);
+    border: 1px solid var(--border);
+    padding: 15px 36px;
+    border-radius: var(--rs);
+    font-family: var(--ff-b);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.25s;
+    white-space: nowrap;
+  }
+  .btn-secondary:hover { border-color: var(--gold); color: var(--gold); }
+
+  .btn-back {
+    background: none;
+    border: 1px solid var(--border-lt);
+    padding: 14px 20px;
+    border-radius: var(--rs);
+    font-family: var(--ff-b);
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--cream-dim);
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    flex-shrink: 0;
+  }
+  .btn-back:hover { border-color: var(--cream-dim); color: var(--cream); }
+
+  .btn-next {
+    flex: 1;
+    background: var(--gold);
+    color: var(--bg);
+    border: none;
+    padding: 14px 20px;
+    border-radius: var(--rs);
+    font-family: var(--ff-b);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.25s;
+  }
+  .btn-next:hover:not(:disabled) { background: var(--gold-lt); }
+  .btn-next:disabled { opacity: 0.3; cursor: not-allowed; }
+  .btn-row { display: flex; gap: 10px; margin-top: 28px; }
+
+  .btn-whatsapp {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    background: #25D366;
+    color: #fff;
+    border: none;
+    padding: 16px 28px;
+    border-radius: var(--rs);
+    font-family: var(--ff-b);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.22s;
+    text-decoration: none;
+    width: 100%;
+  }
+  .btn-whatsapp:hover { background: #1EB955; transform: translateY(-1px); }
+
+  /* ── STEP HEADER ── */
+  .steps-header { padding: 48px 0 32px; border-bottom: 1px solid var(--border); margin-bottom: 36px; }
+  .step-label {
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .step-label::after { content: ''; width: 32px; height: 1px; background: var(--gold); opacity: 0.4; }
+  .step-title { font-family: var(--ff-d); font-size: 42px; font-weight: 400; color: var(--cream); line-height: 1.05; }
+  .step-dots { display: flex; gap: 6px; margin-top: 20px; }
+  .step-dot { width: 20px; height: 2px; background: var(--border); border-radius: 1px; transition: all 0.3s; }
+  .step-dot.active { background: var(--gold); width: 36px; }
+  .step-dot.done { background: var(--gold); opacity: 0.35; }
+
+  /* ── CARD / SECTION ── */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--r);
+    padding: 28px;
+    margin-bottom: 12px;
+  }
+
+  /* ── FORM ── */
+  .field { margin-bottom: 20px; }
+  .field:last-child { margin-bottom: 0; }
+  label {
+    display: block;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 10px;
+  }
+  input[type=text], input[type=tel], input[type=password], select {
+    width: 100%;
+    padding: 14px 16px;
+    border: 1px solid var(--border);
+    border-radius: var(--rs);
+    font-family: var(--ff-b);
+    font-size: 15px;
+    color: var(--cream);
+    background: var(--bg2);
+    transition: border-color 0.2s;
+    outline: none;
+    appearance: none;
+  }
+  input::placeholder { color: var(--cream-dim); opacity: 0.5; }
+  input:focus, select:focus { border-color: var(--gold); }
+  select option { background: var(--bg2); }
+
+  /* ── SERVICES ── */
+  .cat-title {
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin: 28px 0 12px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+  .cat-title:first-child { margin-top: 0; }
+  .service-grid { display: flex; flex-direction: column; gap: 2px; }
+  .svc-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px 18px;
+    border: 1px solid transparent;
+    border-radius: var(--rs);
+    cursor: pointer;
+    transition: all 0.18s;
+    background: transparent;
+    gap: 12px;
+  }
+  .svc-card:hover { background: var(--bg3); border-color: var(--border); }
+  .svc-card.selected { background: var(--bg3); border-color: var(--gold); }
+  .svc-name { font-size: 14px; color: var(--cream); flex: 1; font-weight: 300; }
+  .svc-card.selected .svc-name { color: var(--cream); }
+  .svc-meta { display: flex; align-items: center; gap: 16px; flex-shrink: 0; }
+  .svc-dur { font-size: 11px; color: var(--cream-dim); letter-spacing: 0.04em; }
+  .svc-price { font-family: var(--ff-d); font-size: 15px; color: var(--gold); }
+
+  /* ── CALENDAR ── */
+  .cal-nav { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+  .cal-month { font-family: var(--ff-d); font-size: 24px; font-weight: 400; color: var(--cream); text-transform: capitalize; }
+  .cal-arrow {
+    background: none;
+    border: 1px solid var(--border);
+    width: 36px;
+    height: 36px;
+    border-radius: var(--rs);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    color: var(--cream-dim);
+    transition: all 0.2s;
+  }
+  .cal-arrow:hover { border-color: var(--gold); color: var(--gold); }
+  .date-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+  .day-hdr { text-align: center; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--cream-dim); padding: 6px 0 10px; opacity: 0.6; }
+  .date-cell {
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--rs);
+    cursor: pointer;
+    transition: all 0.18s;
+    border: 1px solid transparent;
+    font-size: 14px;
+    color: var(--cream);
+    font-weight: 300;
+  }
+  .date-cell:hover:not(.off):not(.past):not(.sunday) { border-color: var(--gold); color: var(--gold); }
+  .date-cell.sel { background: var(--gold); color: var(--bg); border-color: var(--gold); font-weight: 500; }
+  .date-cell.off, .date-cell.past, .date-cell.sunday { opacity: 0.18; cursor: not-allowed; pointer-events: none; }
+
+  /* ── TIME SLOTS ── */
+  .slots-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+  .slot {
+    padding: 13px 6px;
+    text-align: center;
+    border: 1px solid var(--border);
+    border-radius: var(--rs);
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 300;
+    transition: all 0.18s;
+    background: transparent;
+    color: var(--cream);
+  }
+  .slot:hover { border-color: var(--gold); color: var(--gold); }
+  .slot.sel { background: var(--gold); color: var(--bg); border-color: var(--gold); font-weight: 500; }
+
+  /* ── CONFIRM SUMMARY ── */
+  .confirm-box {
+    border: 1px solid var(--border);
+    border-radius: var(--rs);
+    overflow: hidden;
+    margin-bottom: 24px;
+  }
+  .confirm-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--border-lt);
+    gap: 16px;
+  }
+  .confirm-row:last-child { border-bottom: none; }
+  .confirm-row .k { font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold); padding-top: 2px; white-space: nowrap; }
+  .confirm-row .v { font-size: 14px; font-weight: 300; color: var(--cream); text-align: right; }
+
+  /* ── NOTICES ── */
+  .notice {
+    border: 1px solid var(--border);
+    border-radius: var(--rs);
+    padding: 16px 18px;
+    font-size: 13px;
+    color: var(--cream-dim);
+    margin-bottom: 20px;
+    line-height: 1.6;
+    font-weight: 300;
+  }
+  .notice.warn { border-color: rgba(200,150,50,0.25); }
+
+  /* ── MANAGE / ADMIN CARDS ── */
+  .appt-card {
+    border: 1px solid var(--border);
+    border-radius: var(--rs);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 10px;
+    background: var(--card);
+    transition: border-color 0.2s;
+  }
+  .appt-card:hover { border-color: rgba(201,151,106,0.35); }
+  .appt-card.cancelled { opacity: 0.35; }
+  .appt-time { font-family: var(--ff-d); font-size: 26px; color: var(--cream); font-weight: 400; }
+  .appt-svc { font-size: 14px; color: var(--cream-dim); font-weight: 300; }
+  .appt-cli { font-size: 12px; color: var(--cream-dim); opacity: 0.7; letter-spacing: 0.02em; }
+
+  .badge {
+    display: inline-block;
+    font-size: 9px;
+    padding: 4px 10px;
+    border-radius: 2px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    width: fit-content;
+  }
+  .badge-ok { background: rgba(201,151,106,0.12); color: var(--gold); border: 1px solid var(--border); }
+  .badge-off { background: rgba(255,255,255,0.04); color: var(--cream-dim); border: 1px solid var(--border-lt); }
+
+  .btn-danger {
+    background: none;
+    border: 1px solid rgba(180,80,80,0.3);
+    color: #C47070;
+    padding: 8px 14px;
+    border-radius: var(--rs);
+    font-size: 11px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.18s;
+    width: fit-content;
+    font-family: var(--ff-b);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .btn-danger:hover { background: rgba(180,80,80,0.08); }
+
+  /* Admin date tabs */
+  .date-tabs { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 4px; margin-bottom: 20px; scrollbar-width: none; }
+  .date-tabs::-webkit-scrollbar { display: none; }
+  .dtab {
+    flex-shrink: 0;
+    padding: 9px 16px;
+    border: 1px solid var(--border);
+    border-radius: var(--rs);
+    background: transparent;
+    font-size: 11px;
+    cursor: pointer;
+    transition: all 0.18s;
+    font-family: var(--ff-b);
+    color: var(--cream-dim);
+    white-space: nowrap;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .dtab.active { background: var(--gold); color: var(--bg); border-color: var(--gold); }
+  .dtab:hover:not(.active) { border-color: var(--gold); color: var(--gold); }
+
+  /* ── SUCCESS SCREEN ── */
+  .success-wrap {
+    padding: 72px 0 48px;
+    text-align: center;
+    max-width: 400px;
+    margin: 0 auto;
+  }
+  .success-rule {
+    width: 1px;
+    height: 64px;
+    background: linear-gradient(to bottom, transparent, var(--gold), transparent);
+    margin: 0 auto 36px;
+  }
+  .success-tag {
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 16px;
+  }
+  .success-title {
+    font-family: var(--ff-d);
+    font-size: 56px;
+    font-weight: 400;
+    font-style: italic;
+    color: var(--cream);
+    line-height: 1.0;
+    margin-bottom: 16px;
+  }
+  .success-sub { color: var(--cream-dim); font-size: 14px; font-weight: 300; margin-bottom: 44px; line-height: 1.7; }
+  .success-actions { display: flex; flex-direction: column; gap: 10px; }
+
+  /* ── TOAST ── */
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(80px);
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    color: var(--cream);
+    padding: 13px 24px;
+    border-radius: var(--rs);
+    font-size: 13px;
+    letter-spacing: 0.02em;
+    z-index: 999;
+    transition: transform 0.3s ease;
+    white-space: nowrap;
+    pointer-events: none;
+    font-weight: 300;
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+  .toast.err { border-color: rgba(180,80,80,0.4); color: #C47070; }
+
+  /* ── MISC ── */
+  .loading { text-align: center; padding: 48px; color: var(--cream-dim); font-size: 13px; letter-spacing: 0.06em; font-weight: 300; }
+  .empty { text-align: center; padding: 48px 20px; color: var(--cream-dim); font-size: 13px; font-weight: 300; line-height: 1.7; }
+  .section-sub { font-family: var(--ff-d); font-size: 26px; font-weight: 400; color: var(--cream); margin-bottom: 16px; }
+  a { color: var(--gold); }
+
+  @media (max-width: 480px) {
+    .hero h1 { font-size: 44px; }
+    .step-title { font-size: 32px; }
+    .slots-grid { grid-template-columns: repeat(3, 1fr); }
+    header { padding: 16px 18px; }
+    .hero-actions { flex-direction: column; }
+    .btn-primary, .btn-secondary { width: 100%; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo" onclick="showView('home')">Baltic <span>Studio</span></div>
+  <nav class="header-nav">
+    <button class="nav-btn" onclick="showView('home')">Inicio</button>
+    <button class="nav-btn" onclick="showView('manage')">Mis turnos</button>
+    <button class="nav-btn" id="nav-admin" onclick="showView('admin')">Admin</button>
+  </nav>
+</header>
+
+<main>
+  <!-- ═══ HOME ═══ -->
+  <div id="view-home" class="view active">
+    <div class="hero">
+      <p class="hero-tag">Tapiales, Buenos Aires</p>
+      <h1>Tu momento<br>de <em>belleza</em></h1>
+      <p>Reservá tu turno online en cualquier<br>momento, desde donde estés.</p>
+      <div class="hero-actions">
+        <button class="btn-primary" onclick="startBooking()">Reservar turno</button>
+        <button class="btn-secondary" onclick="showView('manage')">Gestionar mi turno</button>
+      </div>
+      <div class="info-strip">
+        <div class="info-item">
+          <div class="lbl">Horario</div>
+          <div class="val">Lunes a Sáb · 10–19hs</div>
+        </div>
+        <div class="info-item">
+          <div class="lbl">Dirección</div>
+          <div class="val">Altolaguirre 473, Tapiales</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ BOOK ═══ -->
+  <div id="view-book" class="view"></div>
+
+  <!-- ═══ MANAGE ═══ -->
+  <div id="view-manage" class="view">
+    <div class="steps-header">
+      <p class="step-label">Baltic Studio</p>
+      <h2 class="step-title">Mis turnos</h2>
+    </div>
+    <div class="card">
+      <div class="field">
+        <label>Tu DNI</label>
+        <input type="text" id="mgmt-dni" placeholder="Sin puntos ni espacios" maxlength="11">
+      </div>
+      <button class="btn-primary" onclick="findAppointments()">Buscar mis turnos</button>
+    </div>
+    <div id="mgmt-results"></div>
+  </div>
+
+  <!-- ═══ ADMIN ═══ -->
+  <div id="view-admin" class="view">
+    <div id="admin-login">
+      <div class="steps-header">
+        <p class="step-label">Baltic Studio</p>
+        <h2 class="step-title">Panel admin</h2>
+      </div>
+      <div class="card" style="max-width:320px;margin:0 auto">
+        <div class="field">
+          <label>Contraseña</label>
+          <input type="password" id="admin-pwd" placeholder="••••••••" onkeydown="if(event.key==='Enter')adminLogin()">
+        </div>
+        <button class="btn-primary" onclick="adminLogin()">Ingresar</button>
+      </div>
+    </div>
+    <div id="admin-panel" style="display:none">
+      <div class="steps-header" style="display:flex;justify-content:space-between;align-items:flex-start">
+        <div>
+          <p class="step-label">Panel admin</p>
+          <h2 class="step-title">Turnos</h2>
+        </div>
+        <button class="nav-btn" onclick="adminLogout()" style="margin-top:8px">Salir</button>
+      </div>
+      <div class="date-tabs" id="admin-tabs"></div>
+      <div id="admin-appts"></div>
+
+      <div style="margin-top:36px">
+        <h3 class="section-sub">Bloquear horario</h3>
+        <div class="card">
+          <div class="field">
+            <label>Fecha</label>
+            <input type="text" id="blk-date" placeholder="YYYY-MM-DD">
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+            <div class="field">
+              <label>Desde</label>
+              <input type="text" id="blk-from" placeholder="10:00">
+            </div>
+            <div class="field">
+              <label>Hasta</label>
+              <input type="text" id="blk-to" placeholder="13:00">
+            </div>
+          </div>
+          <div class="field">
+            <label>Profesional</label>
+            <select id="blk-pro">
+              <option value="0">Ambas profesionales</option>
+              <option value="1">Profesional 1</option>
+              <option value="2">Profesional 2</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Motivo (opcional)</label>
+            <input type="text" id="blk-reason" placeholder="Feriado, ausencia, etc.">
+          </div>
+          <button class="btn-primary" onclick="blockSlot()">Bloquear horario</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ══════════════════════════════════════════════════════════════
+   🛠️  UTILS — primero, para que estén disponibles al inicializar
+   ══════════════════════════════════════════════════════════════ */
+function todayStr() { return new Date().toISOString().split('T')[0]; }
+
+/* ══════════════════════════════════════════════════════════════
+   🧠 STATE — declarado antes que todo para evitar TDZ errors
+   ══════════════════════════════════════════════════════════════ */
+let ST = {
+  step: 1, client: {}, svc: null, date: null, slot: null,
+  calYear: new Date().getFullYear(), calMonth: new Date().getMonth(),
+};
+
+/* ══════════════════════════════════════════════════════════════
+   ⚙️  CONFIGURACIÓN — Completar antes de subir
+   ══════════════════════════════════════════════════════════════ */
+const CFG = {
+  supabaseUrl:  'https://gebwbkpdhhlyxsqrusdj.supabase.co',
+  supabaseKey:  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdlYndia3BkaGhseXhzcXJ1c2RqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU2NDc4MDEsImV4cCI6MjA5MTIyMzgwMX0.f6VNLOJYfVkQPCc47rlJLz5q7TDPSg0wTIjQJdUDKTc',
+  balticWA:     '5491132013255', // número de Baltic sin + ni espacios
+  adminPwd:     'Baltic2024!',
+  adminDate:    todayStr(),
+};
+
+/* ══════════════════════════════════════════════════════════════
+   📋 SERVICIOS
+   ══════════════════════════════════════════════════════════════ */
+const SVCS = [
+  // UÑAS
+  { id:1,  cat:'Uñas',     name:'Esculpidas de gel',              dur:90,  price:32000 },
+  { id:2,  cat:'Uñas',     name:'Service de uñas',                dur:60,  price:30000 },
+  { id:3,  cat:'Uñas',     name:'Capping gel',                    dur:60,  price:27000 },
+  { id:4,  cat:'Uñas',     name:'Semipermanente',                 dur:40,  price:25000 },
+  { id:5,  cat:'Uñas',     name:'Semipermanente en pies',         dur:40,  price:20000 },
+  { id:6,  cat:'Uñas',     name:'Retirado de uñas (gel/polygel)', dur:30,  price:10500 },
+  { id:7,  cat:'Uñas',     name:'Retirado de acrílicas',          dur:30,  price:11500 },
+  { id:8,  cat:'Uñas',     name:'Retirado de semipermanente',     dur:30,  price:5000  },
+  // PESTAÑAS
+  { id:9,  cat:'Pestañas', name:'Clásicas',                           dur:120, price:25000 },
+  { id:10, cat:'Pestañas', name:'Efecto rimmel',                      dur:120, price:25500 },
+  { id:11, cat:'Pestañas', name:'Volumen Baltic (V.Ruso)',             dur:150, price:26000 },
+  { id:12, cat:'Pestañas', name:'Volumen brasileso (Tech YY 4D)',      dur:150, price:26500 },
+  { id:13, cat:'Pestañas', name:'Volumen bajo (Tech 3D)',              dur:150, price:26500 },
+  { id:14, cat:'Pestañas', name:'Volumen medio (Tech 4D)',             dur:150, price:27000 },
+  { id:15, cat:'Pestañas', name:'Service de pestañas',                dur:90,  price:25000 },
+  { id:16, cat:'Pestañas', name:'Retirado de pestañas',               dur:40,  price:7000  },
+  // CEJAS
+  { id:17, cat:'Cejas',    name:'Lifting + Tinte + Nutrición',        dur:90, price:24500 },
+  { id:18, cat:'Cejas',    name:'Perfilado con diseño',               dur:90, price:10000 },
+  { id:19, cat:'Cejas',    name:'Laminado',                           dur:90, price:14000 },
+  { id:20, cat:'Cejas',    name:'Perfilado + Laminado',               dur:90, price:19000 },
+  { id:21, cat:'Cejas',    name:'Lifting + Laminado/Perfilado',       dur:90, price:27000 },
+  { id:22, cat:'Cejas',    name:'Lifting + Laminado + Perfilado',     dur:90, price:28500 },
+];
+
+/* ══════════════════════════════════════════════════════════════
+   🗄️  SUPABASE
+   ══════════════════════════════════════════════════════════════ */
+const CONFIGURED = CFG.supabaseUrl !== 'YOUR_SUPABASE_URL' && CFG.supabaseKey !== 'YOUR_SUPABASE_ANON_KEY';
+let db = null;
+try {
+  if (CONFIGURED && typeof supabase !== 'undefined') {
+    db = supabase.createClient(CFG.supabaseUrl, CFG.supabaseKey);
+  } else if (CONFIGURED) {
+    console.warn('Supabase CDN no cargó correctamente.');
+  }
+} catch(e) { console.error('Error inicializando Supabase:', e); }
+
+if (!CONFIGURED) {
+  document.addEventListener('DOMContentLoaded', () => {
+    const banner = document.createElement('div');
+    banner.style.cssText = 'position:fixed;top:0;left:0;right:0;background:#2D2320;color:#fff;text-align:center;padding:12px 20px;font-size:13px;font-family:Jost,sans-serif;z-index:9999;line-height:1.5';
+    banner.innerHTML = '⚙️ <strong>Modo demo</strong> — Completá las credenciales de Supabase en el archivo para activar la base de datos.';
+    document.body.prepend(banner);
+  });
+}
+
+async function dbQuery(fn) {
+  if (!db) { showToast('Configurá Supabase primero (ver instrucciones).', true); return null; }
+  try { return await fn(); }
+  catch(e) { console.error(e); showToast('Error de conexión. Revisá las credenciales.', true); return null; }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   🛠️  UTILS (continuación)
+   ══════════════════════════════════════════════════════════════ */
+function minToTime(m) {
+  return `${String(Math.floor(m/60)).padStart(2,'0')}:${String(m%60).padStart(2,'0')}`;
+}
+function timeToMin(t) {
+  const [h,m] = t.slice(0,5).split(':').map(Number);
+  return h*60+m;
+}
+function overlaps(s1,e1,s2,e2) {
+  return timeToMin(s1) < timeToMin(e2) && timeToMin(e1) > timeToMin(s2);
+}
+function fmtDate(ds) {
+  return new Date(ds+'T12:00:00').toLocaleDateString('es-AR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+}
+function fmtDateShort(ds) {
+  return new Date(ds+'T12:00:00').toLocaleDateString('es-AR',{weekday:'short',day:'numeric',month:'short'});
+}
+function fmtPrice(p) { return '$'+p.toLocaleString('es-AR'); }
+function fmtDur(m) {
+  if(m<60) return `${m} min`;
+  const h=Math.floor(m/60), rem=m%60;
+  return rem>0 ? `${h}h ${rem}min` : `${h}h`;
+}
+function showToast(msg, isErr=false) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast show' + (isErr?' err':'');
+  clearTimeout(t._t);
+  t._t = setTimeout(()=>t.classList.remove('show'), 3200);
+}
+function svc(id) { return SVCS.find(s=>s.id===id); }
+
+/* ══════════════════════════════════════════════════════════════
+   🗺️  VIEWS
+   ══════════════════════════════════════════════════════════════ */
+function showView(name) {
+  document.querySelectorAll('.view').forEach(v=>{ v.classList.remove('active'); v.style.animation='none'; });
+  const el = document.getElementById('view-'+name);
+  el.style.animation = '';
+  el.classList.add('active');
+}
+
+/* ══════════════════════════════════════════════════════════════
+   📅 BOOKING FLOW
+   ══════════════════════════════════════════════════════════════ */
+function startBooking() {
+  Object.assign(ST, { step:1, client:{}, svc:null, date:null, slot:null,
+    calYear:new Date().getFullYear(), calMonth:new Date().getMonth() });
+  showView('book');
+  renderStep();
+}
+
+async function renderStep() {
+  const wrap = document.getElementById('view-book');
+  const STEP_NAMES = ['Tus datos','Servicio','Fecha','Horario','Confirmación'];
+  const s = ST.step;
+  const dots = STEP_NAMES.map((_,i)=>{
+    const c = i+1<s?'done':i+1===s?'active':'';
+    return `<div class="step-dot ${c}"></div>`;
+  }).join('');
+  const header = `
+    <div class="steps-header">
+      <p class="step-label">Paso ${s} de ${STEP_NAMES.length}</p>
+      <h2 class="step-title">${STEP_NAMES[s-1]}</h2>
+      <div class="step-dots">${dots}</div>
+    </div>`;
+
+  let body = '';
+  if(s===1) body = step1HTML();
+  else if(s===2) body = step2HTML();
+  else if(s===3) body = step3HTML();
+  else if(s===4) body = step4Skeleton();
+  else if(s===5) body = step5HTML();
+
+  wrap.innerHTML = header + body;
+
+  if(s===1) { step1Bind(); checkStep1(); }
+  else if(s===2) step2Bind();
+  else if(s===4) await loadSlots();
+}
+
+/* ── Step 1: client info ── */
+function step1HTML() {
+  const c = ST.client;
+  return `
+  <div class="card">
+    <div class="field"><label>Nombre</label>
+      <input type="text" id="s1n" value="${c.name||''}" placeholder="Tu nombre"></div>
+    <div class="field"><label>Apellido</label>
+      <input type="text" id="s1s" value="${c.surname||''}" placeholder="Tu apellido"></div>
+    <div class="field"><label>DNI</label>
+      <input type="text" id="s1d" value="${c.dni||''}" placeholder="Sin puntos ni espacios" maxlength="11"></div>
+    <div class="field"><label>Celular</label>
+      <input type="tel" id="s1p" value="${c.phone||''}" placeholder="Ej: 1123456789"></div>
+  </div>
+  <div class="btn-row">
+    <button class="btn-back" onclick="showView('home')">Cancelar</button>
+    <button class="btn-next" id="s1ok" onclick="goStep(2)" disabled>Continuar</button>
+  </div>`;
+}
+function step1Bind() {
+  ['s1n','s1s','s1d','s1p'].forEach(id=>document.getElementById(id).addEventListener('input',checkStep1));
+}
+function checkStep1() {
+  const ok = ['s1n','s1s','s1d','s1p'].every(id=>document.getElementById(id).value.trim());
+  document.getElementById('s1ok').disabled = !ok;
+}
+function goStep(n) {
+  if(ST.step===1) {
+    ST.client = { name:document.getElementById('s1n').value.trim(),
+      surname:document.getElementById('s1s').value.trim(),
+      dni:document.getElementById('s1d').value.trim(),
+      phone:document.getElementById('s1p').value.trim() };
+  }
+  ST.step = n;
+  renderStep();
+}
+
+/* ── Step 2: service ── */
+function step2HTML() {
+  const cats = [...new Set(SVCS.map(s=>s.cat))];
+  let html = '<div class="card">';
+  cats.forEach(cat=>{
+    html += `<p class="cat-title">${cat}</p><div class="service-grid">`;
+    SVCS.filter(s=>s.cat===cat).forEach(sv=>{
+      const sel = ST.svc?.id===sv.id?'selected':'';
+      html += `<div class="svc-card ${sel}" data-id="${sv.id}">
+        <span class="svc-name">${sv.name}</span>
+        <span class="svc-meta">
+          <span class="svc-dur">${fmtDur(sv.dur)}</span>
+          <span class="svc-price">${fmtPrice(sv.price)}</span>
+        </span></div>`;
+    });
+    html += '</div>';
+  });
+  html += '</div>';
+  html += `<div class="btn-row">
+    <button class="btn-back" onclick="ST.step=1;renderStep()">Atrás</button>
+    <button class="btn-next" id="s2ok" onclick="ST.step=3;renderStep()" ${!ST.svc?'disabled':''}>Continuar</button>
+  </div>`;
+  return html;
+}
+function step2Bind() {
+  document.querySelectorAll('.svc-card').forEach(card=>{
+    card.addEventListener('click',()=>{
+      ST.svc = SVCS.find(s=>s.id===+card.dataset.id);
+      ST.date=null; ST.slot=null;
+      document.querySelectorAll('.svc-card').forEach(c=>c.classList.remove('selected'));
+      card.classList.add('selected');
+      document.getElementById('s2ok').disabled=false;
+    });
+  });
+}
+
+/* ── Step 3: date ── */
+function step3HTML() {
+  const yr=ST.calYear, mo=ST.calMonth;
+  const today=new Date(); today.setHours(0,0,0,0);
+  const maxD=new Date(today); maxD.setDate(today.getDate()+60);
+  const firstDow=new Date(yr,mo,1).getDay();
+  const dim=new Date(yr,mo+1,0).getDate();
+  const moName=new Date(yr,mo,1).toLocaleDateString('es-AR',{month:'long',year:'numeric'});
+  const dayNames=['Do','Lu','Ma','Mi','Ju','Vi','Sá'];
+
+  let cells=dayNames.map(d=>`<div class="day-hdr">${d}</div>`).join('');
+  for(let i=0;i<firstDow;i++) cells+='<div></div>';
+  for(let d=1;d<=dim;d++){
+    const dt=new Date(yr,mo,d); dt.setHours(0,0,0,0);
+    const ds=`${yr}-${String(mo+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const isSun=dt.getDay()===0;
+    const isPast=dt<today, isFar=dt>maxD, isSel=ST.date===ds;
+    let cls='date-cell';
+    if(isSun) cls+=' sunday';
+    else if(isPast||isFar) cls+=' past';
+    else if(isSel) cls+=' sel';
+    const click=(!isSun&&!isPast&&!isFar)?`onclick="pickDate('${ds}')"`:''
+    cells+=`<div class="${cls}" ${click}>${d}</div>`;
+  }
+  return `
+  <div class="card">
+    <div class="cal-nav">
+      <button class="cal-arrow" onclick="shiftMonth(-1)">‹</button>
+      <span class="cal-month">${moName}</span>
+      <button class="cal-arrow" onclick="shiftMonth(1)">›</button>
+    </div>
+    <div class="date-grid">${cells}</div>
+  </div>
+  <div class="btn-row">
+    <button class="btn-back" onclick="ST.step=2;renderStep()">Atrás</button>
+    <button class="btn-next" id="s3ok" onclick="ST.step=4;renderStep()" ${!ST.date?'disabled':''}>Continuar</button>
+  </div>`;
+}
+function pickDate(ds){ ST.date=ds; ST.slot=null; ST.step=3; renderStep(); }
+function shiftMonth(d){
+  ST.calMonth+=d;
+  if(ST.calMonth>11){ST.calMonth=0;ST.calYear++;}
+  if(ST.calMonth<0){ST.calMonth=11;ST.calYear--;}
+  renderStep();
+}
+
+/* ── Step 4: time slots ── */
+function step4Skeleton() {
+  return `
+  <div class="card" id="slots-box"><div class="loading">Buscando horarios disponibles…</div></div>
+  <div class="btn-row">
+    <button class="btn-back" onclick="ST.step=3;renderStep()">Atrás</button>
+    <button class="btn-next" id="s4ok" disabled onclick="ST.step=5;renderStep()">Continuar</button>
+  </div>`;
+}
+async function loadSlots() {
+  const box = document.getElementById('slots-box');
+  if (!db) { box.innerHTML='<div class="empty">⚙️ Configurá las credenciales de Supabase para ver disponibilidad.</div>'; return; }
+  let appts=[], blocked=[];
+  try {
+    const [r1,r2] = await Promise.all([
+      db.from('appointments').select('professional_id,time_start,time_end').eq('date',ST.date).eq('status','confirmed'),
+      db.from('blocked_slots').select('professional_id,time_start,time_end').eq('date',ST.date),
+    ]);
+    appts = r1.data||[]; blocked = r2.data||[];
+  } catch(e) { box.innerHTML='<div class="empty">Error de conexión.</div>'; console.error(e); return; }
+  const dur=ST.svc.dur, OPEN=10*60, CLOSE=19*60;
+  const slots=[];
+  for(let t=OPEN; t+dur<=CLOSE; t+=30){
+    const ts=minToTime(t), te=minToTime(t+dur);
+    let freePro=null;
+    for(let pro=1;pro<=2;pro++){
+      const ap=(appts||[]).filter(a=>a.professional_id===pro);
+      const bl=(blocked||[]).filter(b=>b.professional_id===pro);
+      const ok=!ap.some(a=>overlaps(ts,te,a.time_start,a.time_end))
+              &&!bl.some(b=>overlaps(ts,te,b.time_start,b.time_end));
+      if(ok){freePro=pro;break;}
+    }
+    if(freePro) slots.push({ts,te,pro:freePro});
+  }
+  if(!slots.length){
+    box.innerHTML='<div class="empty">Sin turnos disponibles para este día.<br>Probá con otra fecha.</div>';
+    return;
+  }
+  const selTs=ST.slot?.ts;
+  box.innerHTML='<div class="slots-grid">'+slots.map(sl=>{
+    const sel=selTs===sl.ts?'sel':'';
+    return `<div class="slot ${sel}" onclick="pickSlot('${sl.ts}','${sl.te}',${sl.pro})">${sl.ts}</div>`;
+  }).join('')+'</div>';
+  if(ST.slot) document.getElementById('s4ok').disabled=false;
+}
+function pickSlot(ts,te,pro){
+  ST.slot={ts,te,pro};
+  document.querySelectorAll('.slot').forEach(s=>s.classList.remove('sel'));
+  event.target.classList.add('sel');
+  document.getElementById('s4ok').disabled=false;
+}
+
+/* ── Step 5: confirm ── */
+function step5HTML() {
+  const c=ST.client, sv=ST.svc, sl=ST.slot;
+  return `
+  <div class="card">
+    <div class="confirm-box">
+      <div class="confirm-row"><span class="k">Servicio</span><span class="v">${sv.name}</span></div>
+      <div class="confirm-row"><span class="k">Precio</span><span class="v">${fmtPrice(sv.price)}</span></div>
+      <div class="confirm-row"><span class="k">Duración</span><span class="v">${fmtDur(sv.dur)}</span></div>
+      <div class="confirm-row"><span class="k">Fecha</span><span class="v">${fmtDate(ST.date)}</span></div>
+      <div class="confirm-row"><span class="k">Horario</span><span class="v">${sl.ts} – ${sl.te}hs</span></div>
+      <div class="confirm-row"><span class="k">Nombre</span><span class="v">${c.name} ${c.surname}</span></div>
+      <div class="confirm-row"><span class="k">DNI</span><span class="v">${c.dni}</span></div>
+    </div>
+    <div class="notice">Revisá que todo sea correcto. Al confirmar, guardamos tu turno y te redirigimos a WhatsApp para avisarle a Baltic.</div>
+    <button class="btn-primary" id="btn-confirm" onclick="confirmAppointment()">Confirmar turno</button>
+  </div>
+  <div class="btn-row" style="margin-top:14px">
+    <button class="btn-back" onclick="ST.step=4;renderStep()">Atrás</button>
+  </div>`;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   ✅ CONFIRM
+   ══════════════════════════════════════════════════════════════ */
+async function confirmAppointment() {
+  const btn=document.getElementById('btn-confirm');
+  btn.textContent='Guardando...'; btn.disabled=true;
+  if (!db) { showToast('Configurá Supabase primero.', true); btn.textContent='Confirmar turno'; btn.disabled=false; return; }
+  try {
+    const c=ST.client;
+    // Upsert client
+    let clientId;
+    const {data:ex}=await db.from('clients').select('id').eq('dni',c.dni).maybeSingle();
+    if(ex){ clientId=ex.id; }
+    else {
+      const {data:nc,error:e}=await db.from('clients').insert({
+        name:c.name,surname:c.surname,dni:c.dni,phone:c.phone
+      }).select('id').single();
+      if(e) throw e;
+      clientId=nc.id;
+    }
+    // Insert appointment
+    const {error:ae}=await db.from('appointments').insert({
+      client_id:clientId, professional_id:ST.slot.pro,
+      service_id:ST.svc.id, date:ST.date,
+      time_start:ST.slot.ts+':00', time_end:ST.slot.te+':00',
+      status:'confirmed'
+    });
+    if(ae) throw ae;
+    showSuccess();
+  } catch(err) {
+    console.error(err);
+    showToast('Ocurrió un error. Intentá de nuevo.', true);
+    btn.textContent='Confirmar turno'; btn.disabled=false;
+  }
+}
+
+function showSuccess() {
+  const sv=ST.svc, c=ST.client;
+  const msg=encodeURIComponent(
+    `Hola Baltic Studio! 🌸 Reservé mi turno:\n`+
+    `📅 *${fmtDate(ST.date)}*\n`+
+    `⏰ *${ST.slot.ts}hs*\n`+
+    `💅 *${sv.name}*\n\n`+
+    `Nombre: ${c.name} ${c.surname}\n`+
+    `DNI: ${c.dni}\n`+
+    `Tel: ${c.phone}`
+  );
+  document.getElementById('view-book').innerHTML=`
+    <div class="success-wrap">
+      <div class="success-rule"></div>
+      <p class="success-tag">Reserva confirmada</p>
+      <h2 class="success-title">Listo.</h2>
+      <p class="success-sub">Tu turno quedó guardado en nuestro sistema.<br>Avisale a Baltic por WhatsApp para que quede registrado.</p>
+      <div class="success-actions">
+        <a href="https://wa.me/${CFG.balticWA}?text=${msg}" target="_blank" class="btn-whatsapp">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          Enviar mensaje a Baltic
+        </a>
+        <button class="btn-secondary" onclick="showView('home')">Volver al inicio</button>
+      </div>
+    </div>`;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   📋 MANAGE APPOINTMENT
+   ══════════════════════════════════════════════════════════════ */
+async function findAppointments() {
+  const dni=document.getElementById('mgmt-dni').value.trim();
+  if(!dni){showToast('Ingresá tu DNI',true);return;}
+  const res=document.getElementById('mgmt-results');
+  res.innerHTML='<div class="loading">Buscando…</div>';
+  if (!db) { res.innerHTML='<div class="card"><p style="text-align:center;color:var(--muted)">⚙️ Configurá Supabase para activar esta función.</p></div>'; return; }
+  let client;
+  try { const r=await db.from('clients').select('id,name,surname').eq('dni',dni).maybeSingle(); client=r.data; }
+  catch(e) { res.innerHTML='<div class="card"><p style="color:var(--muted)">Error de conexión.</p></div>'; return; }
+  if(!client){
+    res.innerHTML='<div class="card"><p style="text-align:center;color:var(--muted)">No encontramos turnos con ese DNI.</p></div>';
+    return;
+  }
+  const today=todayStr();
+  let appts;
+  try { const r=await db.from('appointments').select('id,date,time_start,time_end,status,service_id').eq('client_id',client.id).gte('date',today).eq('status','confirmed').order('date',{ascending:true}); appts=r.data; }
+  catch(e) { res.innerHTML='<div class="card"><p style="color:var(--muted)">Error al buscar turnos.</p></div>'; return; }
+
+  if(!appts||!appts.length){
+    res.innerHTML=`<div class="card"><p style="text-align:center;color:var(--muted)">No tenés turnos próximos, ${client.name}.</p></div>`;
+    return;
+  }
+  const now=new Date();
+  let html=`<p style="margin-bottom:12px;color:var(--muted);font-size:13px">Próximos turnos de ${client.name}:</p>`;
+  appts.forEach(ap=>{
+    const sv=svc(ap.service_id);
+    const apDt=new Date(ap.date+'T'+ap.time_start);
+    const diffH=(apDt-now)/3600000;
+    const canCancel=diffH>48;
+    const waMsg=encodeURIComponent(`Hola! Necesito gestionar mi turno del ${fmtDate(ap.date)} a las ${ap.time_start.slice(0,5)}hs. DNI: ${dni}`);
+    html+=`
+      <div class="appt-card" id="appt-${ap.id}">
+        <div class="appt-time">${ap.time_start.slice(0,5)}hs · ${fmtDateShort(ap.date)}</div>
+        <div class="appt-svc">${sv?.name||'Servicio'}</div>
+        ${canCancel
+          ? `<button class="btn-danger" onclick="cancelAppt(${ap.id},'${dni}',this)">Cancelar turno</button>`
+          : `<div class="notice warn" style="margin-top:8px;margin-bottom:0">
+              Faltan menos de 48hs. Para cancelar o modificar, contactá a Baltic directamente.<br>
+              <a href="https://wa.me/${CFG.balticWA}?text=${waMsg}" target="_blank" style="color:var(--rose);font-weight:500">Escribir a Baltic por WhatsApp →</a>
+             </div>`
+        }
+      </div>`;
+  });
+  res.innerHTML=html;
+}
+
+async function cancelAppt(id, dni, btn) {
+  if(!confirm('¿Cancelás este turno?')) return;
+  btn.disabled=true; btn.textContent='Cancelando…';
+  if (!db) { showToast('Configurá Supabase primero.', true); return; }
+  let error;
+  try { const r=await db.from('appointments').update({status:'cancelled'}).eq('id',id); error=r.error; } catch(e){error=e;}
+  if(error){ showToast('Error al cancelar.',true); btn.disabled=false; btn.textContent='Cancelar turno'; return; }
+  showToast('Turno cancelado.');
+  findAppointments();
+}
+
+/* ══════════════════════════════════════════════════════════════
+   🔐 ADMIN
+   ══════════════════════════════════════════════════════════════ */
+function adminLogin() {
+  if(document.getElementById('admin-pwd').value===CFG.adminPwd){
+    document.getElementById('admin-login').style.display='none';
+    document.getElementById('admin-panel').style.display='block';
+    buildAdminTabs();
+    loadAdminAppts(CFG.adminDate);
+  } else {
+    showToast('Contraseña incorrecta.',true);
+  }
+}
+function adminLogout() {
+  document.getElementById('admin-login').style.display='block';
+  document.getElementById('admin-panel').style.display='none';
+  document.getElementById('admin-pwd').value='';
+}
+
+function buildAdminTabs() {
+  const today=new Date();
+  let html='';
+  for(let i=0;i<14;i++){
+    const d=new Date(today); d.setDate(today.getDate()+i);
+    const ds=d.toISOString().split('T')[0];
+    const lbl=i===0?'Hoy':d.toLocaleDateString('es-AR',{weekday:'short',day:'numeric',month:'short'});
+    html+=`<button class="dtab ${ds===CFG.adminDate?'active':''}" onclick="adminPickDate('${ds}')">${lbl}</button>`;
+  }
+  document.getElementById('admin-tabs').innerHTML=html;
+}
+
+function adminPickDate(ds) {
+  CFG.adminDate=ds;
+  document.querySelectorAll('.dtab').forEach(t=>t.classList.remove('active'));
+  event.target.classList.add('active');
+  loadAdminAppts(ds);
+}
+
+async function loadAdminAppts(date) {
+  const box=document.getElementById('admin-appts');
+  box.innerHTML='<div class="loading">Cargando…</div>';
+  if (!db) { box.innerHTML='<div class="empty">⚙️ Configurá Supabase para ver turnos.</div>'; return; }
+  let data;
+  try { const r=await db.from('appointments').select('id,time_start,time_end,status,service_id,professional_id,clients(name,surname,phone,dni)').eq('date',date).order('time_start',{ascending:true}); data=r.data; } catch(e){box.innerHTML='<div class="empty">Error de conexión.</div>';return;}
+
+  if(!data||!data.length){ box.innerHTML='<div class="empty">Sin turnos para este día.</div>'; return; }
+  let html='';
+  data.forEach(ap=>{
+    const sv=svc(ap.service_id), cl=ap.clients;
+    const isOk=ap.status==='confirmed';
+    html+=`
+      <div class="appt-card ${isOk?'':'cancelled'}">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:8px">
+          <div class="appt-time">${ap.time_start.slice(0,5)} – ${ap.time_end.slice(0,5)}</div>
+          <span class="badge ${isOk?'badge-ok':'badge-off'}">${isOk?'Confirmado':'Cancelado'}</span>
+        </div>
+        <div class="appt-svc">${sv?.name||'—'}</div>
+        <div class="appt-cli">${cl?.name} ${cl?.surname} · DNI ${cl?.dni} · ${cl?.phone}</div>
+        <div class="appt-cli" style="font-size:11px">Profesional ${ap.professional_id}</div>
+        ${isOk?`<button class="btn-danger" onclick="adminCancel(${ap.id},this)">Cancelar</button>`:''}
+      </div>`;
+  });
+  box.innerHTML=html;
+}
+
+async function adminCancel(id,btn) {
+  if(!confirm('¿Cancelar este turno?')) return;
+  btn.disabled=true;
+  if (!db) return;
+  try { await db.from('appointments').update({status:'cancelled'}).eq('id',id); } catch(e){showToast('Error.',true);return;}
+  showToast('Turno cancelado.');
+  loadAdminAppts(CFG.adminDate);
+}
+
+async function blockSlot() {
+  const date=document.getElementById('blk-date').value.trim();
+  const from=document.getElementById('blk-from').value.trim();
+  const to=document.getElementById('blk-to').value.trim();
+  const reason=document.getElementById('blk-reason').value.trim();
+  const proVal=document.getElementById('blk-pro').value;
+  if(!date||!from||!to){ showToast('Completá fecha, desde y hasta.',true); return; }
+  const pros=proVal==='0'?[1,2]:[parseInt(proVal)];
+  for(const pro of pros){
+    if (db) try { await db.from('blocked_slots').insert({professional_id:pro,date,time_start:from+':00',time_end:to+':00',reason:reason||null}); } catch(e){showToast('Error al bloquear.',true);return;}
+  }
+  showToast('Horario bloqueado.');
+  ['blk-date','blk-from','blk-to','blk-reason'].forEach(id=>document.getElementById(id).value='');
+}
+</script>
+</body>
+</html>
