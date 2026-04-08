@@ -732,6 +732,42 @@
   }
   .btn-reschedule:hover { border-color: var(--gold); color: var(--gold); }
 
+  /* ── FIDELIZACIÓN ── */
+  .fidel-card {
+    border: 1px solid var(--border);
+    border-radius: var(--r);
+    padding: 22px;
+    background: var(--card);
+    margin-bottom: 20px;
+  }
+  .fidel-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; gap: 12px; }
+  .fidel-name { font-family: var(--ff-d); font-size: 24px; font-weight: 400; color: var(--cream); }
+  .fidel-dni { font-size: 12px; color: var(--cream-dim); margin-top: 3px; letter-spacing: 0.04em; }
+  .fidel-badge {
+    border: 1px solid;
+    border-radius: 2px;
+    padding: 4px 12px;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .fidel-stats { display: flex; gap: 0; border-top: 1px solid var(--border-lt); padding-top: 16px; }
+  .fidel-stat { flex: 1; padding-right: 16px; border-right: 1px solid var(--border-lt); margin-right: 16px; }
+  .fidel-stat:last-child { border-right: none; margin-right: 0; }
+  .fidel-stat-val { font-family: var(--ff-d); font-size: 28px; font-weight: 400; color: var(--cream); line-height: 1; }
+  .fidel-stat-lbl { font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gold); margin-top: 5px; }
+  .fidel-section-title {
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 12px;
+    font-weight: 500;
+  }
+
   /* ── SERVICIOS VIEW ── */
   .svc-view-cat { margin-bottom: 44px; }
   .svc-view-cat-title {
@@ -1012,12 +1048,9 @@
       </div>
     </div>
     <div id="admin-panel" style="display:none">
-      <div class="steps-header" style="display:flex;justify-content:space-between;align-items:flex-start">
-        <div>
-          <p class="step-label">Panel admin</p>
-          <h2 class="step-title">Baltic Studio</h2>
-        </div>
-        <button class="nav-btn" onclick="adminLogout()" style="margin-top:8px">Salir</button>
+      <div class="steps-header">
+        <p class="step-label">Panel admin</p>
+        <h2 class="step-title">Baltic Studio</h2>
       </div>
 
       <div class="admin-view-tabs">
@@ -1280,8 +1313,26 @@ function step1Bind() {
   ['s1n','s1s','s1d','s1p'].forEach(id=>document.getElementById(id).addEventListener('input',checkStep1));
 }
 function checkStep1() {
-  const ok = ['s1n','s1s','s1d','s1p'].every(id=>document.getElementById(id).value.trim());
+  const filled = ['s1n','s1s','s1d','s1p'].every(id=>document.getElementById(id).value.trim());
+  const phone = document.getElementById('s1p').value.trim().replace(/\D/g,'');
+  const validPhone = phone.length >= 10 && phone.length <= 13;
+  const dni = document.getElementById('s1d').value.trim().replace(/\D/g,'');
+  const validDni = dni.length >= 7 && dni.length <= 9;
+  const ok = filled && validPhone && validDni;
   document.getElementById('s1ok').disabled = !ok;
+  // Show hints
+  const phoneEl = document.getElementById('s1p');
+  if(phoneEl.value.trim() && !validPhone) {
+    phoneEl.style.borderColor = 'rgba(180,80,80,0.6)';
+  } else {
+    phoneEl.style.borderColor = '';
+  }
+  const dniEl = document.getElementById('s1d');
+  if(dniEl.value.trim() && !validDni) {
+    dniEl.style.borderColor = 'rgba(180,80,80,0.6)';
+  } else {
+    dniEl.style.borderColor = '';
+  }
 }
 function goStep(n) {
   if(ST.step===1) {
@@ -1477,6 +1528,7 @@ function step5HTML() {
       <div class="confirm-row"><span class="k">DNI</span><span class="v">${c.dni}</span></div>
     </div>
     <div class="notice">Revisá que todo sea correcto. Al confirmar, guardamos tu turno y te redirigimos a WhatsApp para avisarle a Baltic.</div>
+    <div class="notice warn" style="margin-top:0">Las cancelaciones con <strong>menos de 48hs de anticipación tienen costo</strong>. Podés cancelar sin cargo desde "Mis turnos" si te quedan más de 48hs.</div>
     <button class="btn-primary" id="btn-confirm" onclick="confirmAppointment()">Confirmar turno</button>
   </div>
   <div class="btn-row" style="margin-top:14px">
@@ -1513,6 +1565,13 @@ async function confirmAppointment() {
     });
     if(ae) throw new Error(ae.message || JSON.stringify(ae));
     await sendConfirmationEmail(c, ST.svc.name, ST.date, ST.slot.ts);
+    // Save confirmation to localStorage for reference
+    localStorage.setItem('baltic_last_booking', JSON.stringify({
+      name: c.name, surname: c.surname, dni: c.dni, phone: c.phone,
+      service: ST.svc.name, price: ST.svc.price,
+      date: ST.date, timeStart: ST.slot.ts, timeEnd: ST.slot.te,
+      confirmedAt: new Date().toISOString()
+    }));
     showSuccess();
   } catch(err) {
     console.error(err);
@@ -1537,16 +1596,22 @@ function showSuccess() {
       <div class="success-rule"></div>
       <p class="success-tag">Paso final</p>
       <h2 class="success-title">Casi listo.</h2>
-      <p class="success-sub">Tu turno está pre-reservado. Para que quede <strong style="color:var(--gold)">confirmado definitivamente</strong>, tenés que enviarle el mensaje a Baltic ahora.</p>
-      <div style="border:1px solid var(--border);border-radius:var(--rs);padding:16px 20px;margin-bottom:28px;font-size:13px;color:var(--cream-dim);line-height:1.6;text-align:left">
-        Sin el mensaje, el turno <strong style="color:var(--cream)">no queda reservado</strong> y el horario puede ser tomado por otra persona.
+      <p class="success-sub">Tu turno está pre-reservado. Para que quede <strong style="color:var(--gold)">confirmado definitivamente</strong>, enviále el mensaje a Baltic ahora.</p>
+      <div class="confirm-box" style="margin-bottom:20px;text-align:left">
+        <div class="confirm-row"><span class="k">Servicio</span><span class="v">${sv.name}</span></div>
+        <div class="confirm-row"><span class="k">Fecha</span><span class="v">${fmtDate(ST.date)}</span></div>
+        <div class="confirm-row"><span class="k">Horario</span><span class="v">${ST.slot.ts} – ${ST.slot.te}hs</span></div>
+        <div class="confirm-row"><span class="k">Total</span><span class="v">${fmtPrice(sv.price)}</span></div>
+      </div>
+      <div style="border:1px solid rgba(180,80,80,0.25);border-radius:var(--rs);padding:14px 18px;margin-bottom:20px;font-size:13px;color:var(--cream-dim);line-height:1.6">
+        Sin el mensaje a Baltic, el horario puede ser tomado por otra persona.
       </div>
       <div class="success-actions">
         <a href="https://wa.me/${CFG.balticWA}?text=${msg}" target="_blank" class="btn-whatsapp" style="font-size:13px;padding:18px 28px">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
           Confirmar turno por WhatsApp
         </a>
-        <button class="btn-secondary" onclick="showView('home')" style="font-size:11px;color:var(--cream-dim);opacity:0.6">Ya envié el mensaje — volver al inicio</button>
+        <button class="btn-secondary" onclick="showView('manage');document.getElementById('mgmt-dni').value='${c.dni}';findAppointments()" style="font-size:11px">Ya envié — ver mis turnos</button>
       </div>
     </div>`;
 }
@@ -1559,48 +1624,103 @@ async function findAppointments() {
   if(!dni){showToast('Ingresá tu DNI',true);return;}
   const res=document.getElementById('mgmt-results');
   res.innerHTML='<div class="loading">Buscando…</div>';
-  if (!db) { res.innerHTML='<div class="card"><p style="text-align:center;color:var(--muted)">⚙️ Configurá Supabase para activar esta función.</p></div>'; return; }
+  if (!db) { res.innerHTML='<div class="card"><p style="text-align:center;color:var(--cream-dim)">Configurá Supabase para activar esta función.</p></div>'; return; }
   let client;
-  try { const r=await db.from('clients').select('id,name,surname').eq('dni',dni).maybeSingle(); client=r.data; }
-  catch(e) { res.innerHTML='<div class="card"><p style="color:var(--muted)">Error de conexión.</p></div>'; return; }
+  try { const r=await db.from('clients').select('id,name,surname,phone').eq('dni',dni).maybeSingle(); client=r.data; }
+  catch(e) { res.innerHTML='<div class="card"><p style="color:var(--cream-dim)">Error de conexión.</p></div>'; return; }
   if(!client){
-    res.innerHTML='<div class="card"><p style="text-align:center;color:var(--muted)">No encontramos turnos con ese DNI.</p></div>';
+    res.innerHTML='<div class="card"><p style="text-align:center;color:var(--cream-dim)">No encontramos ninguna cuenta con ese DNI.</p></div>';
     return;
   }
   const today=todayStr();
-  let appts;
-  try { const r=await db.from('appointments').select('id,date,time_start,time_end,status,service_id').eq('client_id',client.id).gte('date',today).eq('status','confirmed').order('date',{ascending:true}); appts=r.data; }
-  catch(e) { res.innerHTML='<div class="card"><p style="color:var(--muted)">Error al buscar turnos.</p></div>'; return; }
+  let allAppts=[], upcoming=[];
+  try {
+    const [r1,r2] = await Promise.all([
+      db.from('appointments').select('id,date,time_start,time_end,status,service_id').eq('client_id',client.id).eq('status','confirmed').order('date',{ascending:false}),
+      db.from('appointments').select('id,date,time_start,time_end,status,service_id').eq('client_id',client.id).eq('status','confirmed').gte('date',today).order('date',{ascending:true})
+    ]);
+    allAppts=r1.data||[]; upcoming=r2.data||[];
+  } catch(e) { res.innerHTML='<div class="card"><p style="color:var(--cream-dim)">Error al buscar turnos.</p></div>'; return; }
 
-  if(!appts||!appts.length){
-    res.innerHTML=`<div class="card"><p style="text-align:center;color:var(--muted)">No tenés turnos próximos, ${client.name}.</p></div>`;
-    return;
-  }
+  const total=allAppts.length;
+  const past=allAppts.filter(a=>a.date<today);
+  const freq={};
+  allAppts.forEach(a=>{ freq[a.service_id]=(freq[a.service_id]||0)+1; });
+  const favId=Object.entries(freq).sort((a,b)=>b[1]-a[1])[0]?.[0];
+  const favSvc=favId?svc(+favId):null;
+
+  let badge='', badgeColor='';
+  if(total>=20){ badge='VIP'; badgeColor='var(--gold)'; }
+  else if(total>=10){ badge='Frecuente'; badgeColor='var(--gold)'; }
+  else if(total>=5){ badge='Habitual'; badgeColor='var(--cream-dim)'; }
+
+  let html=`
+    <div class="fidel-card">
+      <div class="fidel-header">
+        <div>
+          <div class="fidel-name">${client.name} ${client.surname}</div>
+          <div class="fidel-dni">DNI ${dni}</div>
+        </div>
+        ${badge?`<span class="fidel-badge" style="border-color:${badgeColor};color:${badgeColor}">${badge}</span>`:''}
+      </div>
+      <div class="fidel-stats">
+        <div class="fidel-stat">
+          <div class="fidel-stat-val">${total}</div>
+          <div class="fidel-stat-lbl">turnos totales</div>
+        </div>
+        <div class="fidel-stat">
+          <div class="fidel-stat-val">${upcoming.length}</div>
+          <div class="fidel-stat-lbl">próximos</div>
+        </div>
+        ${favSvc?`<div class="fidel-stat" style="flex:2">
+          <div class="fidel-stat-val" style="font-size:12px;line-height:1.4;font-family:var(--ff-b)">${favSvc.name}</div>
+          <div class="fidel-stat-lbl">servicio favorito</div>
+        </div>`:''}
+      </div>
+    </div>`;
+
   const now=new Date();
-  let html=`<p style="margin-bottom:12px;color:var(--muted);font-size:13px">Próximos turnos de ${client.name}:</p>`;
-  appts.forEach(ap=>{
-    const sv=svc(ap.service_id);
-    const apDt=new Date(ap.date+'T'+ap.time_start);
-    const diffH=(apDt-now)/3600000;
-    const canCancel=diffH>48;
-    const waMsg=encodeURIComponent(`Hola! Necesito gestionar mi turno del ${fmtDate(ap.date)} a las ${ap.time_start.slice(0,5)}hs. DNI: ${dni}`);
-    html+=`
-      <div class="appt-card" id="appt-${ap.id}">
+  if(upcoming.length){
+    html+=`<p class="fidel-section-title">Próximos turnos</p>`;
+    upcoming.forEach(ap=>{
+      const sv2=svc(ap.service_id);
+      const apDt=new Date(ap.date+'T'+ap.time_start);
+      const diffH=(apDt-now)/3600000;
+      const canCancel=diffH>48;
+      const waMsg=encodeURIComponent('Hola! Necesito gestionar mi turno del '+fmtDate(ap.date)+' a las '+ap.time_start.slice(0,5)+'hs. DNI: '+dni);
+      html+=`<div class="appt-card" id="appt-${ap.id}">
         <div class="appt-time">${ap.time_start.slice(0,5)}hs · ${fmtDateShort(ap.date)}</div>
-        <div class="appt-svc">${sv?.name||'Servicio'}</div>
-        <div class="appt-cli">${fmtDate(ap.date)}</div>
+        <div class="appt-svc">${sv2?.name||'—'}</div>
         ${canCancel
-          ? `<div class="appt-actions">
+          ?`<div class="appt-actions">
               <button class="btn-reschedule" onclick="startReschedule(${ap.id},${ap.service_id},'${dni}')">Modificar</button>
               <button class="btn-danger" onclick="cancelAppt(${ap.id},'${dni}',this)">Cancelar</button>
-             </div>`
-          : `<div class="notice warn" style="margin-top:8px;margin-bottom:0">
-              Faltan menos de 48hs — para modificar o cancelar contactá a Baltic.<br>
-              <a href="https://wa.me/${CFG.balticWA}?text=${waMsg}" target="_blank" style="color:var(--gold);font-weight:500">Escribir a Baltic por WhatsApp →</a>
-             </div>`
+            </div>`
+          :`<div class="notice warn" style="margin-top:8px;margin-bottom:0;font-size:12px">
+              Menos de 48hs — contactá a Baltic para cambios.<br>
+              <a href="https://wa.me/${CFG.balticWA}?text=${waMsg}" target="_blank" style="color:var(--gold);font-weight:500">Escribir a Baltic →</a>
+            </div>`
         }
       </div>`;
-  });
+    });
+  } else {
+    html+=`<div class="appt-card" style="text-align:center;color:var(--cream-dim);font-size:14px;font-weight:300">Sin turnos próximos.
+      <div style="margin-top:12px"><button class="btn-reschedule" onclick="startBooking()">Reservar turno</button></div>
+    </div>`;
+  }
+
+  if(past.length){
+    html+=`<p class="fidel-section-title" style="margin-top:28px">Historial</p>`;
+    past.slice(0,6).forEach(ap=>{
+      const sv2=svc(ap.service_id);
+      html+=`<div class="appt-card" style="opacity:0.45">
+        <div class="appt-time" style="font-size:17px">${ap.time_start.slice(0,5)}hs · ${fmtDateShort(ap.date)}</div>
+        <div class="appt-svc">${sv2?.name||'—'}</div>
+      </div>`;
+    });
+    if(past.length>6) html+=`<p style="text-align:center;font-size:12px;color:var(--cream-dim);margin-top:8px;opacity:0.6">y ${past.length-6} turnos anteriores</p>`;
+  }
+
   res.innerHTML=html;
 }
 
