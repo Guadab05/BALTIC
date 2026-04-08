@@ -38,11 +38,89 @@
     -webkit-font-smoothing: antialiased;
   }
 
+  /* ── SIDEBAR OVERLAY ── */
+  #sidebar-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(44,31,20,0.45);
+    z-index: 200;
+    backdrop-filter: blur(2px);
+  }
+  #sidebar-overlay.open { display: block; }
+
+  /* ── SIDEBAR ── */
+  #sidebar {
+    position: fixed;
+    top: 0; left: 0; bottom: 0;
+    width: 280px;
+    background: var(--card);
+    border-right: 1px solid var(--border);
+    z-index: 300;
+    transform: translateX(-100%);
+    transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
+    display: flex;
+    flex-direction: column;
+    padding: 32px 0 24px;
+    overflow-y: auto;
+  }
+  #sidebar.open { transform: translateX(0); }
+  .sidebar-logo {
+    font-family: var(--ff-d);
+    font-size: 22px;
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    color: var(--cream);
+    cursor: pointer;
+    padding: 0 24px 4px;
+    text-transform: uppercase;
+  }
+  .sidebar-logo span { color: var(--gold); font-style: italic; }
+  .sidebar-location {
+    font-size: 11px;
+    color: var(--cream-dim);
+    padding: 0 24px 28px;
+    letter-spacing: 0.04em;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 12px;
+  }
+  .sidebar-nav { display: flex; flex-direction: column; flex: 1; padding: 0 12px; }
+  .sidebar-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 13px 14px;
+    border-radius: 6px;
+    font-family: var(--ff-b);
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--cream-dim);
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.18s;
+    letter-spacing: 0.02em;
+    width: 100%;
+  }
+  .sidebar-item:hover { background: var(--bg3); color: var(--cream); }
+  .sidebar-item svg { flex-shrink: 0; opacity: 0.6; }
+  .sidebar-divider { height: 1px; background: var(--border); margin: 12px 24px; }
+  .sidebar-admin { color: var(--cream-dim); font-size: 13px; }
+  .sidebar-info {
+    padding: 20px 24px 0;
+    font-size: 12px;
+    color: var(--cream-dim);
+    opacity: 0.5;
+    line-height: 1.8;
+    letter-spacing: 0.02em;
+  }
+
   /* ── HEADER ── */
   header {
     background: var(--bg);
     border-bottom: 1px solid var(--border);
-    padding: 20px 32px;
+    padding: 16px 20px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -50,32 +128,54 @@
     top: 0;
     z-index: 100;
   }
+  .hamburger {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 6px;
+    border-radius: 6px;
+    transition: background 0.2s;
+  }
+  .hamburger:hover { background: var(--bg3); }
+  .hamburger span {
+    display: block;
+    width: 22px;
+    height: 1.5px;
+    background: var(--cream-dim);
+    border-radius: 2px;
+    transition: all 0.2s;
+  }
   .logo {
     font-family: var(--ff-d);
-    font-size: 22px;
+    font-size: 20px;
     font-weight: 400;
     letter-spacing: 0.12em;
     color: var(--cream);
     cursor: pointer;
     text-transform: uppercase;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
   }
-  .logo span { color: var(--gold); font-style: italic; font-weight: 400; }
-  .header-nav { display: flex; gap: 4px; }
-  .nav-btn {
-    background: none;
+  .logo span { color: var(--gold); font-style: italic; }
+  .btn-header-reservar {
+    background: var(--gold);
+    color: var(--bg);
     border: none;
+    padding: 9px 18px;
+    border-radius: var(--rs);
     font-family: var(--ff-b);
     font-size: 11px;
     font-weight: 500;
-    color: var(--cream-dim);
-    cursor: pointer;
-    padding: 8px 14px;
-    border-radius: 2px;
-    transition: all 0.2s;
     letter-spacing: 0.1em;
     text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s;
   }
-  .nav-btn:hover, .nav-btn.active { color: var(--gold); }
+  .btn-header-reservar:hover { background: var(--gold-lt); }
 
   /* ── MAIN ── */
   main { max-width: 620px; margin: 0 auto; padding: 0 20px 80px; }
@@ -783,14 +883,48 @@
 </head>
 <body>
 
-<header>
-  <div class="logo" onclick="showView('home')">Baltic <span>Studio</span></div>
-  <nav class="header-nav">
-    <button class="nav-btn" onclick="showView('home')">Inicio</button>
-    <button class="nav-btn" onclick="showView('servicios')">Servicios</button>
-    <button class="nav-btn" onclick="showView('manage')">Mis turnos</button>
-    <button class="nav-btn" id="nav-admin" onclick="showView('admin')">Admin</button>
+<!-- SIDEBAR OVERLAY -->
+<div id="sidebar-overlay" onclick="closeSidebar()"></div>
+
+<!-- SIDEBAR DRAWER -->
+<div id="sidebar">
+  <div class="sidebar-logo" onclick="closeSidebar();showView('home')">Baltic <span>Studio</span></div>
+  <p class="sidebar-location">Tapiales, Buenos Aires</p>
+  <nav class="sidebar-nav">
+    <button class="sidebar-item" onclick="closeSidebar();showView('home')">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      Inicio
+    </button>
+    <button class="sidebar-item" onclick="closeSidebar();showView('servicios')">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+      Servicios
+    </button>
+    <button class="sidebar-item" onclick="closeSidebar();startBooking()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      Reservar turno
+    </button>
+    <button class="sidebar-item" onclick="closeSidebar();showView('manage')">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      Mis turnos
+    </button>
   </nav>
+  <div class="sidebar-divider"></div>
+  <button class="sidebar-item sidebar-admin" onclick="closeSidebar();showView('admin')">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93l-1.41 1.41M5.34 18.66l-1.41 1.41M19.07 19.07l-1.41-1.41M5.34 5.34L3.93 3.93M21 12h-2M5 12H3M12 3V1M12 23v-2"/></svg>
+    Admin
+  </button>
+  <div class="sidebar-info">
+    <p>Lun a Sáb · 10 a 19hs</p>
+    <p>Altolaguirre 473, Tapiales</p>
+  </div>
+</div>
+
+<header>
+  <button class="hamburger" onclick="openSidebar()" aria-label="Menú">
+    <span></span><span></span><span></span>
+  </button>
+  <div class="logo" onclick="showView('home')">Baltic <span>Studio</span></div>
+  <button class="btn-header-reservar" onclick="startBooking()">Reservar</button>
 </header>
 
 <main>
@@ -812,54 +946,6 @@
         <div class="info-item">
           <div class="lbl">Dirección</div>
           <div class="val">Altolaguirre 473, Tapiales</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- SERVICIOS -->
-    <div class="home-section">
-      <div class="home-section-hdr">
-        <p class="section-eyebrow">Lo que ofrecemos</p>
-        <h2 class="section-title">Nuestros servicios</h2>
-      </div>
-      <div class="svc-cats">
-        <div class="svc-cat-card">
-          <div class="svc-cat-num">I</div>
-          <h3 class="svc-cat-name">Uñas</h3>
-          <p class="svc-cat-desc">Esculpidas de gel, semipermanente, capping, service y retirados. Toda aplicación incluye deco y nail art.</p>
-          <div class="svc-cat-items">
-            <span>Esculpidas de gel</span>
-            <span>Semipermanente</span>
-            <span>Capping gel</span>
-            <span>Service</span>
-            <span>+ más</span>
-          </div>
-          <p class="svc-cat-price">Desde $5.000</p>
-        </div>
-        <div class="svc-cat-card">
-          <div class="svc-cat-num">II</div>
-          <h3 class="svc-cat-name">Pestañas</h3>
-          <p class="svc-cat-desc">Extensiones clásicas, volumen ruso, brasileso, efecto rimmel y services. Técnicas de última generación.</p>
-          <div class="svc-cat-items">
-            <span>Clásicas</span>
-            <span>Volumen Baltic</span>
-            <span>Efecto rimmel</span>
-            <span>Service</span>
-            <span>+ más</span>
-          </div>
-          <p class="svc-cat-price">Desde $7.000</p>
-        </div>
-        <div class="svc-cat-card">
-          <div class="svc-cat-num">III</div>
-          <h3 class="svc-cat-name">Cejas</h3>
-          <p class="svc-cat-desc">Perfilado con diseño, laminado, lifting con tinte y nutrición. Resultados naturales y duraderos.</p>
-          <div class="svc-cat-items">
-            <span>Perfilado con diseño</span>
-            <span>Laminado</span>
-            <span>Lifting + Tinte</span>
-            <span>Combos</span>
-          </div>
-          <p class="svc-cat-price">Desde $10.000</p>
         </div>
       </div>
     </div>
@@ -2004,6 +2090,22 @@ async function savePrecios() {
     btn.textContent='Guardar cambios'; btn.disabled=false;
   }
 }
+
+/* ══════════════════════════════════════════════════════════════
+   ☰ SIDEBAR
+   ══════════════════════════════════════════════════════════════ */
+function openSidebar() {
+  document.getElementById('sidebar').classList.add('open');
+  document.getElementById('sidebar-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeSidebar() {
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sidebar-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+// Close sidebar on ESC key
+document.addEventListener('keydown', e => { if(e.key==='Escape') closeSidebar(); });
 </script>
 </body>
 </html>
