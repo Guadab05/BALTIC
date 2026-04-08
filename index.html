@@ -543,6 +543,233 @@
   .section-sub { font-family: var(--ff-d); font-size: 26px; font-weight: 400; color: var(--cream); margin-bottom: 16px; }
   a { color: var(--gold); }
 
+  /* ── HOME SECTIONS ── */
+  .home-section { padding: 56px 0; border-bottom: 1px solid var(--border); }
+  .home-section-hdr { margin-bottom: 36px; }
+  .section-eyebrow { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 10px; font-weight: 500; }
+  .section-title { font-family: var(--ff-d); font-size: 40px; font-weight: 400; color: var(--cream); }
+
+  .svc-cats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .svc-cat-card {
+    border: 1px solid var(--border);
+    border-radius: var(--r);
+    padding: 28px 24px;
+    background: var(--card);
+    transition: border-color 0.2s;
+  }
+  .svc-cat-card:hover { border-color: rgba(160,100,58,0.4); }
+  .svc-cat-num {
+    font-family: var(--ff-d);
+    font-size: 13px;
+    font-weight: 400;
+    letter-spacing: 0.18em;
+    color: var(--gold);
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 16px;
+  }
+  .svc-cat-name { font-family: var(--ff-d); font-size: 22px; font-weight: 400; color: var(--cream); margin-bottom: 10px; }
+  .svc-cat-desc { font-size: 13px; color: var(--cream-dim); font-weight: 300; line-height: 1.65; margin-bottom: 16px; }
+  .svc-cat-items { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 18px; }
+  .svc-cat-items span { font-size: 11px; padding: 4px 10px; border: 1px solid var(--border); border-radius: 2px; color: var(--cream-dim); }
+  .svc-cat-price { font-family: var(--ff-d); font-size: 16px; color: var(--gold); }
+
+  /* ── POLICY BOX ── */
+  .policy-box {
+    margin: 48px 0;
+    border: 1px solid var(--border);
+    border-radius: var(--r);
+    padding: 24px 28px;
+    background: var(--card);
+  }
+  .policy-hdr {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 14px;
+  }
+  .policy-box p { font-size: 13px; color: var(--cream-dim); line-height: 1.7; font-weight: 300; }
+  .policy-box strong { color: var(--cream); font-weight: 500; }
+
+  /* ── ADMIN STATS ── */
+  .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 32px; }
+  .stat-card { border: 1px solid var(--border); border-radius: var(--r); padding: 22px; background: var(--card); }
+  .stat-lbl { font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold); margin-bottom: 8px; }
+  .stat-val { font-family: var(--ff-d); font-size: 38px; font-weight: 400; color: var(--cream); line-height: 1; }
+  .stat-sub { font-size: 12px; color: var(--cream-dim); margin-top: 4px; font-weight: 300; }
+  .top-list { display: flex; flex-direction: column; gap: 8px; margin-top: 8px; }
+  .top-item { display: flex; justify-content: space-between; align-items: center; font-size: 13px; padding: 10px 0; border-bottom: 1px solid var(--border-lt); }
+  .top-item:last-child { border-bottom: none; }
+  .top-item .ti-name { color: var(--cream); font-weight: 300; }
+  .top-item .ti-count { font-family: var(--ff-d); font-size: 18px; color: var(--gold); }
+
+  /* ── ADMIN TABS UI ── */
+  .admin-view-tabs { display: flex; gap: 0; border: 1px solid var(--border); border-radius: var(--r); overflow: hidden; margin-bottom: 28px; }
+  .avt { flex: 1; padding: 12px; text-align: center; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; font-family: var(--ff-b); cursor: pointer; background: transparent; border: none; color: var(--cream-dim); transition: all 0.2s; }
+  .avt.active { background: var(--gold); color: var(--bg); }
+  .avt:hover:not(.active) { color: var(--gold); }
+
+  /* ── RESCHEDULE ── */
+  .appt-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+  .btn-reschedule {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--cream-dim);
+    padding: 8px 14px;
+    border-radius: var(--rs);
+    font-size: 11px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.18s;
+    font-family: var(--ff-b);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .btn-reschedule:hover { border-color: var(--gold); color: var(--gold); }
+
+  /* ── SERVICIOS VIEW ── */
+  .svc-view-cat { margin-bottom: 44px; }
+  .svc-view-cat-title {
+    font-family: var(--ff-d);
+    font-size: 28px;
+    font-weight: 400;
+    color: var(--cream);
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 4px;
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+  }
+  .svc-view-cat-title span {
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-family: var(--ff-b);
+  }
+  .svc-view-note {
+    font-size: 12px;
+    color: var(--gold);
+    margin-bottom: 16px;
+    margin-top: 8px;
+    font-style: italic;
+    font-family: var(--ff-d);
+  }
+  .svc-view-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border-lt);
+    gap: 16px;
+  }
+  .svc-view-row:last-child { border-bottom: none; }
+  .svc-view-name { font-size: 14px; color: var(--cream); font-weight: 300; flex: 1; }
+  .svc-view-right { display: flex; align-items: center; gap: 20px; flex-shrink: 0; }
+  .svc-view-dur { font-size: 12px; color: var(--cream-dim); }
+  .svc-view-price { font-family: var(--ff-d); font-size: 18px; color: var(--gold); }
+
+  /* ── ADMIN PRECIOS ── */
+  .precio-cat-title {
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin: 28px 0 12px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+    font-weight: 500;
+  }
+  .precio-cat-title:first-child { margin-top: 0; }
+  .precio-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border-lt);
+    gap: 16px;
+  }
+  .precio-row:last-child { border-bottom: none; }
+  .precio-name { font-size: 13px; color: var(--cream); font-weight: 300; flex: 1; }
+  .precio-input {
+    width: 120px;
+    padding: 8px 12px;
+    border: 1px solid var(--border);
+    border-radius: var(--rs);
+    font-family: var(--ff-d);
+    font-size: 15px;
+    color: var(--gold);
+    background: var(--bg);
+    outline: none;
+    text-align: right;
+    transition: border-color 0.2s;
+    flex-shrink: 0;
+  }
+  .precio-input:focus { border-color: var(--gold); }
+  .precio-save-bar {
+    position: sticky;
+    bottom: 20px;
+    display: flex;
+    justify-content: flex-end;
+    padding-top: 24px;
+  }
+
+  /* ── RECORDATORIOS ── */
+  .recall-header { margin-bottom: 28px; }
+  .recall-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    border: 1px solid var(--border);
+    border-radius: var(--r);
+    padding: 18px 20px;
+    background: var(--card);
+    margin-bottom: 10px;
+    transition: border-color 0.2s;
+  }
+  .recall-card:hover { border-color: rgba(160,100,58,0.35); }
+  .recall-info { display: flex; flex-direction: column; gap: 3px; }
+  .recall-time { font-family: var(--ff-d); font-size: 22px; color: var(--cream); }
+  .recall-name { font-size: 14px; color: var(--cream); font-weight: 400; }
+  .recall-svc  { font-size: 12px; color: var(--cream-dim); font-weight: 300; }
+  .recall-tel  { font-size: 12px; color: var(--cream-dim); opacity: 0.7; }
+  .btn-wa-recall {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #25D366;
+    color: #fff;
+    border: none;
+    padding: 11px 18px;
+    border-radius: var(--rs);
+    font-family: var(--ff-b);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: all 0.2s;
+    flex-shrink: 0;
+  }
+  .btn-wa-recall:hover { background: #1EB955; transform: translateY(-1px); }
+  @media (max-width: 480px) {
+    .recall-card { flex-direction: column; align-items: flex-start; }
+    .btn-wa-recall { width: 100%; justify-content: center; }
+  }
+
+  @media (max-width: 640px) {
+    .svc-cats { grid-template-columns: 1fr; }
+    .stats-grid { grid-template-columns: 1fr; }
+  }
   @media (max-width: 480px) {
     .hero h1 { font-size: 52px; }
     .step-title { font-size: 32px; }
@@ -550,6 +777,7 @@
     header { padding: 16px 18px; }
     .hero-actions { flex-direction: column; }
     .btn-primary, .btn-secondary { width: 100%; text-align: center; }
+    .section-title { font-size: 30px; }
   }
 </style>
 </head>
@@ -559,6 +787,7 @@
   <div class="logo" onclick="showView('home')">Baltic <span>Studio</span></div>
   <nav class="header-nav">
     <button class="nav-btn" onclick="showView('home')">Inicio</button>
+    <button class="nav-btn" onclick="showView('servicios')">Servicios</button>
     <button class="nav-btn" onclick="showView('manage')">Mis turnos</button>
     <button class="nav-btn" id="nav-admin" onclick="showView('admin')">Admin</button>
   </nav>
@@ -585,6 +814,80 @@
           <div class="val">Altolaguirre 473, Tapiales</div>
         </div>
       </div>
+    </div>
+
+    <!-- SERVICIOS -->
+    <div class="home-section">
+      <div class="home-section-hdr">
+        <p class="section-eyebrow">Lo que ofrecemos</p>
+        <h2 class="section-title">Nuestros servicios</h2>
+      </div>
+      <div class="svc-cats">
+        <div class="svc-cat-card">
+          <div class="svc-cat-num">I</div>
+          <h3 class="svc-cat-name">Uñas</h3>
+          <p class="svc-cat-desc">Esculpidas de gel, semipermanente, capping, service y retirados. Toda aplicación incluye deco y nail art.</p>
+          <div class="svc-cat-items">
+            <span>Esculpidas de gel</span>
+            <span>Semipermanente</span>
+            <span>Capping gel</span>
+            <span>Service</span>
+            <span>+ más</span>
+          </div>
+          <p class="svc-cat-price">Desde $5.000</p>
+        </div>
+        <div class="svc-cat-card">
+          <div class="svc-cat-num">II</div>
+          <h3 class="svc-cat-name">Pestañas</h3>
+          <p class="svc-cat-desc">Extensiones clásicas, volumen ruso, brasileso, efecto rimmel y services. Técnicas de última generación.</p>
+          <div class="svc-cat-items">
+            <span>Clásicas</span>
+            <span>Volumen Baltic</span>
+            <span>Efecto rimmel</span>
+            <span>Service</span>
+            <span>+ más</span>
+          </div>
+          <p class="svc-cat-price">Desde $7.000</p>
+        </div>
+        <div class="svc-cat-card">
+          <div class="svc-cat-num">III</div>
+          <h3 class="svc-cat-name">Cejas</h3>
+          <p class="svc-cat-desc">Perfilado con diseño, laminado, lifting con tinte y nutrición. Resultados naturales y duraderos.</p>
+          <div class="svc-cat-items">
+            <span>Perfilado con diseño</span>
+            <span>Laminado</span>
+            <span>Lifting + Tinte</span>
+            <span>Combos</span>
+          </div>
+          <p class="svc-cat-price">Desde $10.000</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- POLÍTICA DE CANCELACIÓN -->
+    <div class="policy-box">
+      <div class="policy-hdr">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <span>Política de cancelación</span>
+      </div>
+      <p>Las cancelaciones con <strong>menos de 48 horas de anticipación tienen costo</strong>. Si necesitás cancelar o modificar tu turno con menos de 48hs de anticipación, debés comunicarte directamente con Baltic por WhatsApp.</p>
+      <p style="margin-top:10px">Podés gestionar tu turno sin costo a través de la sección <strong>"Gestionar mi turno"</strong> si te quedan más de 48hs.</p>
+      <a href="https://wa.me/5491132013255" target="_blank" class="btn-wa-recall" style="margin-top:20px;display:inline-flex;background:transparent;color:var(--gold);border:1px solid var(--border);">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Escribir a Baltic
+      </a>
+    </div>
+  </div>
+
+  <!-- ═══ SERVICIOS ═══ -->
+  <div id="view-servicios" class="view">
+    <div class="steps-header">
+      <p class="step-label">Baltic Studio</p>
+      <h2 class="step-title">Servicios & precios</h2>
+    </div>
+    <div id="servicios-content"><div class="loading">Cargando servicios…</div></div>
+    <div style="margin-top:36px;text-align:center">
+      <button class="btn-primary" onclick="startBooking()">Reservar turno</button>
     </div>
   </div>
 
@@ -626,15 +929,42 @@
       <div class="steps-header" style="display:flex;justify-content:space-between;align-items:flex-start">
         <div>
           <p class="step-label">Panel admin</p>
-          <h2 class="step-title">Turnos</h2>
+          <h2 class="step-title">Baltic Studio</h2>
         </div>
         <button class="nav-btn" onclick="adminLogout()" style="margin-top:8px">Salir</button>
       </div>
-      <div class="date-tabs" id="admin-tabs"></div>
-      <div id="admin-appts"></div>
 
-      <div style="margin-top:36px">
-        <h3 class="section-sub">Bloquear horario</h3>
+      <div class="admin-view-tabs">
+        <button class="avt active" id="avt-turnos" onclick="switchAdminTab('turnos')">Turnos</button>
+        <button class="avt" id="avt-recordatorios" onclick="switchAdminTab('recordatorios')">Recordatorios</button>
+        <button class="avt" id="avt-precios" onclick="switchAdminTab('precios')">Precios</button>
+        <button class="avt" id="avt-stats" onclick="switchAdminTab('stats')">Estadísticas</button>
+        <button class="avt" id="avt-bloqueos" onclick="switchAdminTab('bloqueos')">Bloquear horario</button>
+      </div>
+
+      <!-- TAB: TURNOS -->
+      <div id="admin-tab-turnos">
+        <div class="date-tabs" id="admin-tabs"></div>
+        <div id="admin-appts"></div>
+      </div>
+
+      <!-- TAB: RECORDATORIOS -->
+      <div id="admin-tab-recordatorios" style="display:none">
+        <div id="admin-recordatorios-content"><div class="loading">Cargando…</div></div>
+      </div>
+
+      <!-- TAB: PRECIOS -->
+      <div id="admin-tab-precios" style="display:none">
+        <div id="admin-precios-content"><div class="loading">Cargando servicios…</div></div>
+      </div>
+
+      <!-- TAB: ESTADÍSTICAS -->
+      <div id="admin-tab-stats" style="display:none">
+        <div id="admin-stats-content"><div class="loading">Cargando estadísticas…</div></div>
+      </div>
+
+      <!-- TAB: BLOQUEOS -->
+      <div id="admin-tab-bloqueos" style="display:none">
         <div class="card">
           <div class="field">
             <label>Fecha</label>
@@ -691,9 +1021,11 @@ let ST = {
 const CFG = {
   supabaseUrl:  'https://gebwbkpdhhlyxsqrusdj.supabase.co',
   supabaseKey:  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdlYndia3BkaGhseXhzcXJ1c2RqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU2NDc4MDEsImV4cCI6MjA5MTIyMzgwMX0.f6VNLOJYfVkQPCc47rlJLz5q7TDPSg0wTIjQJdUDKTc',
-  balticWA:     '5491132013255', // número de Baltic sin + ni espacios
+  balticWA:     '5491132013255',
   adminPwd:     'Baltic2024!',
   adminDate:    todayStr(),
+  resendKey:    'YOUR_RESEND_API_KEY',   // → resend.com (gratis)
+  balticEmail:  'baltic@tudominio.com',  // → email donde llegan las confirmaciones
 };
 
 /* ══════════════════════════════════════════════════════════════
@@ -797,6 +1129,7 @@ function showView(name) {
   const el = document.getElementById('view-'+name);
   el.style.animation = '';
   el.classList.add('active');
+  if(name==='servicios') loadServiciosView();
 }
 
 /* ══════════════════════════════════════════════════════════════
@@ -911,6 +1244,38 @@ function step2Bind() {
   });
 }
 
+/* ── Calendar HTML builder (shared by booking + reschedule) ── */
+function buildCalendarHTML() {
+  const yr=ST.calYear, mo=ST.calMonth;
+  const today=new Date(); today.setHours(0,0,0,0);
+  const maxD=new Date(today); maxD.setDate(today.getDate()+60);
+  const firstDow=new Date(yr,mo,1).getDay();
+  const dim=new Date(yr,mo+1,0).getDate();
+  const moName=new Date(yr,mo,1).toLocaleDateString('es-AR',{month:'long',year:'numeric'});
+  const dayNames=['Do','Lu','Ma','Mi','Ju','Vi','Sa'];
+  let cells=dayNames.map(d=>`<div class="day-hdr">${d}</div>`).join('');
+  for(let i=0;i<firstDow;i++) cells+='<div></div>';
+  for(let d=1;d<=dim;d++){
+    const dt=new Date(yr,mo,d); dt.setHours(0,0,0,0);
+    const ds=`${yr}-${String(mo+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const isSun=dt.getDay()===0, isPast=dt<today, isFar=dt>maxD, isSel=ST.date===ds;
+    let cls='date-cell';
+    if(isSun) cls+=' sunday';
+    else if(isPast||isFar) cls+=' past';
+    else if(isSel) cls+=' sel';
+    const click=(!isSun&&!isPast&&!isFar)?`onclick="pickDate('${ds}')"`:''
+    cells+=`<div class="${cls}" ${click}>${d}</div>`;
+  }
+  return `<div class="card">
+    <div class="cal-nav">
+      <button class="cal-arrow" onclick="shiftMonth(-1)">&#8249;</button>
+      <span class="cal-month">${moName}</span>
+      <button class="cal-arrow" onclick="shiftMonth(1)">&#8250;</button>
+    </div>
+    <div class="date-grid">${cells}</div>
+  </div>`;
+}
+
 /* ── Step 3: date ── */
 function step3HTML() {
   const yr=ST.calYear, mo=ST.calMonth;
@@ -975,6 +1340,8 @@ async function loadSlots() {
       db.from('appointments').select('professional_id,time_start,time_end').eq('date',ST.date).eq('status','confirmed'),
       db.from('blocked_slots').select('professional_id,time_start,time_end').eq('date',ST.date),
     ]);
+    if(r1.error) throw new Error(r1.error.message);
+    if(r2.error) throw new Error(r2.error.message);
     appts = r1.data||[]; blocked = r2.data||[];
   } catch(e) { box.innerHTML='<div class="empty">Error de conexión.</div>'; console.error(e); return; }
   const dur=ST.svc.dur, OPEN=10*60, CLOSE=19*60;
@@ -1048,7 +1415,7 @@ async function confirmAppointment() {
       const {data:nc,error:e}=await db.from('clients').insert({
         name:c.name,surname:c.surname,dni:c.dni,phone:c.phone
       }).select('id').single();
-      if(e) throw e;
+      if(e) throw new Error(e.message || JSON.stringify(e));
       clientId=nc.id;
     }
     // Insert appointment
@@ -1058,7 +1425,8 @@ async function confirmAppointment() {
       time_start:ST.slot.ts+':00', time_end:ST.slot.te+':00',
       status:'confirmed'
     });
-    if(ae) throw ae;
+    if(ae) throw new Error(ae.message || JSON.stringify(ae));
+    await sendConfirmationEmail(c, ST.svc.name, ST.date, ST.slot.ts);
     showSuccess();
   } catch(err) {
     console.error(err);
@@ -1134,11 +1502,15 @@ async function findAppointments() {
       <div class="appt-card" id="appt-${ap.id}">
         <div class="appt-time">${ap.time_start.slice(0,5)}hs · ${fmtDateShort(ap.date)}</div>
         <div class="appt-svc">${sv?.name||'Servicio'}</div>
+        <div class="appt-cli">${fmtDate(ap.date)}</div>
         ${canCancel
-          ? `<button class="btn-danger" onclick="cancelAppt(${ap.id},'${dni}',this)">Cancelar turno</button>`
+          ? `<div class="appt-actions">
+              <button class="btn-reschedule" onclick="startReschedule(${ap.id},${ap.service_id},'${dni}')">Modificar</button>
+              <button class="btn-danger" onclick="cancelAppt(${ap.id},'${dni}',this)">Cancelar</button>
+             </div>`
           : `<div class="notice warn" style="margin-top:8px;margin-bottom:0">
-              Faltan menos de 48hs. Para cancelar o modificar, contactá a Baltic directamente.<br>
-              <a href="https://wa.me/${CFG.balticWA}?text=${waMsg}" target="_blank" style="color:var(--rose);font-weight:500">Escribir a Baltic por WhatsApp →</a>
+              Faltan menos de 48hs — para modificar o cancelar contactá a Baltic.<br>
+              <a href="https://wa.me/${CFG.balticWA}?text=${waMsg}" target="_blank" style="color:var(--gold);font-weight:500">Escribir a Baltic por WhatsApp →</a>
              </div>`
         }
       </div>`;
@@ -1151,7 +1523,7 @@ async function cancelAppt(id, dni, btn) {
   btn.disabled=true; btn.textContent='Cancelando…';
   if (!db) { showToast('Configurá Supabase primero.', true); return; }
   let error;
-  try { const r=await db.from('appointments').update({status:'cancelled'}).eq('id',id); error=r.error; } catch(e){error=e;}
+  try { const r=await db.from('appointments').update({status:'cancelled'}).eq('id',id); error=r.error||null; } catch(e){error=e;}
   if(error){ showToast('Error al cancelar.',true); btn.disabled=false; btn.textContent='Cancelar turno'; return; }
   showToast('Turno cancelado.');
   findAppointments();
@@ -1164,6 +1536,7 @@ function adminLogin() {
   if(document.getElementById('admin-pwd').value===CFG.adminPwd){
     document.getElementById('admin-login').style.display='none';
     document.getElementById('admin-panel').style.display='block';
+    switchAdminTab('turnos');
     buildAdminTabs();
     loadAdminAppts(CFG.adminDate);
   } else {
@@ -1244,6 +1617,392 @@ async function blockSlot() {
   }
   showToast('Horario bloqueado.');
   ['blk-date','blk-from','blk-to','blk-reason'].forEach(id=>document.getElementById(id).value='');
+}
+
+/* ══════════════════════════════════════════════════════════════
+   🔁 RESCHEDULE
+   ══════════════════════════════════════════════════════════════ */
+let RESCHEDULE = null;
+
+function startReschedule(apptId, serviceId, dni) {
+  RESCHEDULE = { apptId, serviceId, dni };
+  ST.svc = SVCS.find(s=>s.id===serviceId);
+  ST.date = null; ST.slot = null;
+  ST.step = 3;
+  ST.calYear = new Date().getFullYear();
+  ST.calMonth = new Date().getMonth();
+  showView('book');
+  renderRescheduleStep();
+}
+
+async function renderRescheduleStep() {
+  const wrap = document.getElementById('view-book');
+  if(ST.step===3){
+    wrap.innerHTML = `
+      <div class="steps-header">
+        <p class="step-label">Modificar turno — Paso 1</p>
+        <h2 class="step-title">Nueva fecha</h2>
+      </div>` + buildCalendarHTML() + `
+      <div class="btn-row">
+        <button class="btn-back" onclick="RESCHEDULE=null;showView('manage')">Cancelar</button>
+        <button class="btn-next" id="s3ok" onclick="ST.step=4;renderRescheduleStep()" ${!ST.date?'disabled':''}>Continuar</button>
+      </div>`;
+  } else if(ST.step===4){
+    wrap.innerHTML = `
+      <div class="steps-header">
+        <p class="step-label">Modificar turno — Paso 2</p>
+        <h2 class="step-title">Nuevo horario</h2>
+      </div>
+      <div class="card" id="slots-box"><div class="loading">Buscando horarios disponibles…</div></div>
+      <div class="btn-row">
+        <button class="btn-back" onclick="ST.step=3;renderRescheduleStep()">Atrás</button>
+        <button class="btn-next" id="s4ok" disabled onclick="ST.step=5;renderRescheduleStep()">Continuar</button>
+      </div>`;
+    await loadSlots();
+  } else if(ST.step===5){
+    const sl=ST.slot;
+    wrap.innerHTML = `
+      <div class="steps-header">
+        <p class="step-label">Modificar turno — Confirmar</p>
+        <h2 class="step-title">Nuevo horario</h2>
+      </div>
+      <div class="card">
+        <div class="confirm-box">
+          <div class="confirm-row"><span class="k">Servicio</span><span class="v">${ST.svc.name}</span></div>
+          <div class="confirm-row"><span class="k">Nueva fecha</span><span class="v">${fmtDate(ST.date)}</span></div>
+          <div class="confirm-row"><span class="k">Nuevo horario</span><span class="v">${sl.ts} – ${sl.te}hs</span></div>
+        </div>
+        <div class="notice">Este cambio reemplaza tu turno anterior. El horario anterior quedará liberado.</div>
+        <button class="btn-primary" id="btn-confirm-reschedule" onclick="confirmReschedule()">Confirmar cambio</button>
+      </div>
+      <div class="btn-row" style="margin-top:14px">
+        <button class="btn-back" onclick="ST.step=4;renderRescheduleStep()">Atrás</button>
+      </div>`;
+  }
+}
+
+async function confirmReschedule() {
+  const btn=document.getElementById('btn-confirm-reschedule');
+  btn.textContent='Guardando...'; btn.disabled=true;
+  if(!db){showToast('Supabase no configurado.',true);return;}
+  try {
+    const {error}=await db.from('appointments').update({
+      date:ST.date,
+      time_start:ST.slot.ts+':00',
+      time_end:ST.slot.te+':00',
+      professional_id:ST.slot.pro,
+    }).eq('id',RESCHEDULE.apptId);
+    if(error) throw new Error(error.message || JSON.stringify(error));
+    showToast('Turno modificado correctamente.');
+    RESCHEDULE=null;
+    showView('manage');
+    setTimeout(()=>{ document.getElementById('mgmt-dni').value=''; }, 100);
+  } catch(e){
+    console.error(e);
+    showToast('Error al modificar. Intentá de nuevo.',true);
+    btn.textContent='Confirmar cambio'; btn.disabled=false;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   📊 ADMIN — TABS & STATS
+   ══════════════════════════════════════════════════════════════ */
+function switchAdminTab(tab) {
+  ['turnos','recordatorios','precios','stats','bloqueos'].forEach(t=>{
+    document.getElementById('admin-tab-'+t).style.display = t===tab?'block':'none';
+    document.getElementById('avt-'+t).classList.toggle('active', t===tab);
+  });
+  if(tab==='stats') loadAdminStats();
+  if(tab==='recordatorios') loadRecordatorios();
+  if(tab==='precios') loadAdminPrecios();
+}
+
+async function loadAdminStats() {
+  const box=document.getElementById('admin-stats-content');
+  if(!db){box.innerHTML='<div class="empty">Supabase no configurado.</div>';return;}
+  box.innerHTML='<div class="loading">Cargando…</div>';
+  try {
+    // This week range
+    const now=new Date();
+    const dayOfWeek=now.getDay()===0?6:now.getDay()-1;
+    const weekStart=new Date(now); weekStart.setDate(now.getDate()-dayOfWeek); weekStart.setHours(0,0,0,0);
+    const weekEnd=new Date(weekStart); weekEnd.setDate(weekStart.getDate()+6);
+    const wsStr=weekStart.toISOString().split('T')[0];
+    const weStr=weekEnd.toISOString().split('T')[0];
+    const todayStr2=now.toISOString().split('T')[0];
+
+    const [{data:weekAppts},{data:todayAppts},{data:allAppts}] = await Promise.all([
+      db.from('appointments').select('id,service_id,date').eq('status','confirmed').gte('date',wsStr).lte('date',weStr),
+      db.from('appointments').select('id').eq('status','confirmed').eq('date',todayStr2),
+      db.from('appointments').select('id,service_id,date').eq('status','confirmed'),
+    ]);
+
+    // Service frequency
+    const freq={};
+    (allAppts||[]).forEach(a=>{ freq[a.service_id]=(freq[a.service_id]||0)+1; });
+    const topSvcs=Object.entries(freq).sort((a,b)=>b[1]-a[1]).slice(0,5).map(([id,n])=>({name:svc(+id)?.name||'—',n}));
+
+    // Busiest day
+    const dayFreq={};
+    const dayNames=['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
+    (allAppts||[]).forEach(a=>{ const d=new Date(a.date+'T12:00').getDay(); dayFreq[d]=(dayFreq[d]||0)+1; });
+    const busiestDay=Object.entries(dayFreq).sort((a,b)=>b[1]-a[1])[0];
+
+    box.innerHTML=`
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-lbl">Hoy</div>
+          <div class="stat-val">${(todayAppts||[]).length}</div>
+          <div class="stat-sub">turnos confirmados</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-lbl">Esta semana</div>
+          <div class="stat-val">${(weekAppts||[]).length}</div>
+          <div class="stat-sub">${wsStr} — ${weStr}</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-lbl">Total histórico</div>
+          <div class="stat-val">${(allAppts||[]).length}</div>
+          <div class="stat-sub">turnos realizados</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-lbl">Día más ocupado</div>
+          <div class="stat-val" style="font-size:24px">${busiestDay?dayNames[+busiestDay[0]]:'—'}</div>
+          <div class="stat-sub">${busiestDay?busiestDay[1]+' turnos histórico':''}</div>
+        </div>
+      </div>
+      <div class="card">
+        <p class="stat-lbl" style="margin-bottom:16px">Servicios más solicitados</p>
+        <div class="top-list">
+          ${topSvcs.map((s,i)=>`
+            <div class="top-item">
+              <span class="ti-name">${i+1}. ${s.name}</span>
+              <span class="ti-count">${s.n}</span>
+            </div>`).join('')}
+        </div>
+      </div>`;
+  } catch(e) {
+    console.error(e);
+    box.innerHTML='<div class="empty">Error al cargar estadísticas.</div>';
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   📧 EMAIL — Confirmación via Resend
+   ══════════════════════════════════════════════════════════════ */
+async function sendConfirmationEmail(client, svName, date, timeStart) {
+  if(CFG.resendKey==='YOUR_RESEND_API_KEY') return; // no configurado aún
+  try {
+    await fetch('https://api.resend.com/emails', {
+      method:'POST',
+      headers:{ 'Authorization':'Bearer '+CFG.resendKey, 'Content-Type':'application/json' },
+      body: JSON.stringify({
+        from: 'Baltic Studio <turnos@balticstudio.com.ar>',
+        to: [CFG.balticEmail],
+        subject: `Nuevo turno — ${client.name} ${client.surname}`,
+        html: `<div style="font-family:Georgia,serif;max-width:480px;margin:0 auto;padding:32px;color:#2C1F14">
+          <h2 style="font-size:28px;font-weight:400;margin-bottom:24px">Nueva reserva</h2>
+          <table style="width:100%;border-collapse:collapse">
+            <tr><td style="padding:10px 0;border-bottom:1px solid #eee;color:#6B5040;font-size:12px;letter-spacing:0.1em;text-transform:uppercase">Clienta</td><td style="padding:10px 0;border-bottom:1px solid #eee">${client.name} ${client.surname}</td></tr>
+            <tr><td style="padding:10px 0;border-bottom:1px solid #eee;color:#6B5040;font-size:12px;letter-spacing:0.1em;text-transform:uppercase">DNI</td><td style="padding:10px 0;border-bottom:1px solid #eee">${client.dni}</td></tr>
+            <tr><td style="padding:10px 0;border-bottom:1px solid #eee;color:#6B5040;font-size:12px;letter-spacing:0.1em;text-transform:uppercase">Teléfono</td><td style="padding:10px 0;border-bottom:1px solid #eee">${client.phone}</td></tr>
+            <tr><td style="padding:10px 0;border-bottom:1px solid #eee;color:#6B5040;font-size:12px;letter-spacing:0.1em;text-transform:uppercase">Servicio</td><td style="padding:10px 0;border-bottom:1px solid #eee">${svName}</td></tr>
+            <tr><td style="padding:10px 0;border-bottom:1px solid #eee;color:#6B5040;font-size:12px;letter-spacing:0.1em;text-transform:uppercase">Fecha</td><td style="padding:10px 0;border-bottom:1px solid #eee">${fmtDate(date)}</td></tr>
+            <tr><td style="padding:10px 0;color:#6B5040;font-size:12px;letter-spacing:0.1em;text-transform:uppercase">Horario</td><td style="padding:10px 0">${timeStart}hs</td></tr>
+          </table>
+        </div>`
+      })
+    });
+  } catch(e) { console.warn('Email no enviado:', e); }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   🔔 RECORDATORIOS
+   ══════════════════════════════════════════════════════════════ */
+async function loadRecordatorios() {
+  const box = document.getElementById('admin-recordatorios-content');
+  if(!db){ box.innerHTML='<div class="empty">Supabase no configurado.</div>'; return; }
+  box.innerHTML='<div class="loading">Buscando turnos de mañana…</div>';
+
+  // Get tomorrow's date
+  const tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate()+1);
+  const tomorrowStr = tomorrow.toISOString().split('T')[0];
+  const tomorrowLabel = tomorrow.toLocaleDateString('es-AR',{weekday:'long',day:'numeric',month:'long'});
+
+  try {
+    const {data,error} = await db
+      .from('appointments')
+      .select('id,time_start,time_end,service_id,clients(name,surname,phone,dni)')
+      .eq('date', tomorrowStr)
+      .eq('status','confirmed')
+      .order('time_start',{ascending:true});
+
+    if(error) throw new Error(error.message || JSON.stringify(error));
+
+    if(!data||!data.length){
+      box.innerHTML=`
+        <div class="recall-header">
+          <p class="section-eyebrow">Recordatorios</p>
+          <h3 class="section-title" style="font-size:28px">Mañana · ${tomorrowLabel}</h3>
+        </div>
+        <div class="empty">Sin turnos confirmados para mañana.</div>`;
+      return;
+    }
+
+    let html = `
+      <div class="recall-header">
+        <p class="section-eyebrow">Recordatorios</p>
+        <h3 class="section-title" style="font-size:28px">Mañana · ${tomorrowLabel}</h3>
+        <p style="color:var(--cream-dim);font-size:13px;font-weight:300;margin-top:8px">
+          ${data.length} turno${data.length!==1?'s':''} — tocá el botón de cada clienta para abrirle un WhatsApp con el mensaje de recordatorio listo.
+        </p>
+      </div>`;
+
+    data.forEach(ap => {
+      const sv = svc(ap.service_id);
+      const cl = ap.clients;
+      const hora = ap.time_start.slice(0,5);
+      const waMsg = encodeURIComponent(
+        `Hola ${cl.name}! Te recordamos tu turno en Baltic Studio para mañana:\n\n` +
+        `*Fecha:* ${tomorrowLabel}\n` +
+        `*Hora:* ${hora}hs\n` +
+        `*Servicio:* ${sv?.name||'—'}\n\n` +
+        `Si necesitás cancelar o modificar, respondé este mensaje con más de 48hs de anticipación. ` +
+        `De lo contrario, la cancelación tiene costo.\n\n` +
+        `Te esperamos! — Equipo Baltic Studio`
+      );
+      const phone = cl.phone.replace(/\D/g,'');
+      const waPhone = phone.startsWith('54') ? phone : '54'+phone;
+
+      html += `
+        <div class="recall-card">
+          <div class="recall-info">
+            <div class="recall-time">${hora}hs</div>
+            <div class="recall-name">${cl.name} ${cl.surname}</div>
+            <div class="recall-svc">${sv?.name||'—'}</div>
+            <div class="recall-tel">${cl.phone}</div>
+          </div>
+          <a href="https://wa.me/${waPhone}?text=${waMsg}" target="_blank" class="btn-wa-recall">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            Enviar recordatorio
+          </a>
+        </div>`;
+    });
+
+    box.innerHTML = html;
+
+  } catch(e) {
+    console.error(e);
+    box.innerHTML='<div class="empty">Error al cargar los turnos de mañana.</div>';
+  }
+}
+
+/* ══════════════════════════════════════════════════════════════
+   🛍️  SERVICIOS VIEW
+   ══════════════════════════════════════════════════════════════ */
+async function loadServiciosView() {
+  const box = document.getElementById('servicios-content');
+  // Load from DB if available, fallback to SVCS array
+  let items = SVCS;
+  if(db) {
+    try {
+      const {data,error} = await db.from('services').select('*').eq('active',true).order('id');
+      if(!error && data && data.length) {
+        items = data.map(s=>({id:s.id, cat:s.category, name:s.name, dur:s.duration_min, price:s.price}));
+        // Update in-memory SVCS so booking flow uses updated prices
+        items.forEach(s=>{ const idx=SVCS.findIndex(x=>x.id===s.id); if(idx>=0) SVCS[idx].price=s.price; });
+      }
+    } catch(e) { console.warn('Usando precios locales:', e); }
+  }
+
+  const cats = [...new Set(items.map(s=>s.cat))];
+  let html = '';
+  cats.forEach(cat => {
+    const catItems = items.filter(s=>s.cat===cat);
+    html += `<div class="svc-view-cat">
+      <div class="svc-view-cat-title">${cat} <span>${catItems.length} servicios</span></div>
+      ${cat==='Uñas'?'<p class="svc-view-note">Todos los servicios de uñas incluyen deco y nail art.</p>':''}`;
+    catItems.forEach(s => {
+      html += `<div class="svc-view-row">
+        <span class="svc-view-name">${s.name}</span>
+        <span class="svc-view-right">
+          <span class="svc-view-dur">${fmtDur(s.dur)}</span>
+          <span class="svc-view-price">${fmtPrice(s.price)}</span>
+        </span>
+      </div>`;
+    });
+    html += `</div>`;
+  });
+  box.innerHTML = html;
+}
+
+/* ══════════════════════════════════════════════════════════════
+   💲 ADMIN — PRECIOS
+   ══════════════════════════════════════════════════════════════ */
+let SVCS_LOADED = [...SVCS]; // working copy for price editing
+
+async function loadAdminPrecios() {
+  const box = document.getElementById('admin-precios-content');
+  if(!db){ box.innerHTML='<div class="empty">Supabase no configurado.</div>'; return; }
+  box.innerHTML='<div class="loading">Cargando…</div>';
+  try {
+    const {data,error} = await db.from('services').select('*').order('id');
+    if(error) throw new Error(error.message);
+    // If services table is empty, seed from SVCS
+    if(!data||!data.length) {
+      await seedServices();
+      return loadAdminPrecios();
+    }
+    SVCS_LOADED = data.map(s=>({id:s.id,cat:s.category,name:s.name,dur:s.duration_min,price:s.price}));
+    renderPreciosEditor(SVCS_LOADED, box);
+  } catch(e) {
+    box.innerHTML=`<div class="empty">Error al cargar: ${e.message}</div>`;
+  }
+}
+
+async function seedServices() {
+  const rows = SVCS.map(s=>({id:s.id, category:s.cat, name:s.name, duration_min:s.dur, price:s.price, active:true}));
+  await db.from('services').upsert(rows, {onConflict:'id'});
+}
+
+function renderPreciosEditor(items, box) {
+  const cats = [...new Set(items.map(s=>s.cat))];
+  let html = '<div class="card">';
+  cats.forEach(cat => {
+    html += `<p class="precio-cat-title">${cat}</p>`;
+    items.filter(s=>s.cat===cat).forEach(s => {
+      html += `<div class="precio-row">
+        <span class="precio-name">${s.name}</span>
+        <input class="precio-input" type="number" id="precio-${s.id}" value="${s.price}" min="0" step="500">
+      </div>`;
+    });
+  });
+  html += `</div>
+    <div class="precio-save-bar">
+      <button class="btn-primary" id="btn-save-precios" onclick="savePrecios()">Guardar cambios</button>
+    </div>`;
+  box.innerHTML = html;
+}
+
+async function savePrecios() {
+  const btn = document.getElementById('btn-save-precios');
+  btn.textContent = 'Guardando…'; btn.disabled = true;
+  try {
+    const updates = SVCS_LOADED.map(s => {
+      const input = document.getElementById('precio-'+s.id);
+      return { id:s.id, category:s.cat, name:s.name, duration_min:s.dur, price:parseInt(input?.value||s.price), active:true };
+    });
+    const {error} = await db.from('services').upsert(updates, {onConflict:'id'});
+    if(error) throw new Error(error.message);
+    // Update in-memory SVCS
+    updates.forEach(u=>{ const idx=SVCS.findIndex(x=>x.id===u.id); if(idx>=0) SVCS[idx].price=u.price; });
+    showToast('Precios actualizados correctamente.');
+    btn.textContent='Guardar cambios'; btn.disabled=false;
+  } catch(e) {
+    showToast('Error al guardar: '+e.message, true);
+    btn.textContent='Guardar cambios'; btn.disabled=false;
+  }
 }
 </script>
 </body>
